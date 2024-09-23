@@ -1,10 +1,11 @@
-import './App.css';
+import { RouterProvider } from "react-router-dom";
+import router from './router/router.js'
+import "./scss/style.scss";
+
 
 function App() {
   return (
-    <div>
-      dd
-    </div>
+    <RouterProvider router={router} />
   );
 }
 
