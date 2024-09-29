@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Logo from '../../assets/login/logo.svg';
 import Kakao from '../../assets/login/kakao.svg';
 import Naver from '../../assets/login/naver.svg'
@@ -6,6 +7,10 @@ import Google from '../../assets/login/google.svg'
 
 const Login = () => {
   const [showLogin, setShowLogin] = useState(true);
+  const navigate = useNavigate()
+  const handleClick = () => {
+    navigate('/signup');
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -27,13 +32,13 @@ const Login = () => {
           <img className='login-logo' src={Logo} alt=''/>
           <p className='login-text'>CC에 오신 것을 환영합니다!</p>
           <div className='login-buttons'>
-            <button className='login-btn1'>
+            <button className='login-btn1' onClick={handleClick}>
               <img className='login-kakao'src={Kakao}/>
               카카오톡으로 시작하기</button>
-            <button className='login-btn2'>
+            <button className='login-btn2'  onClick={handleClick}>
               <img className='login-naver' src={Naver}/>
               네이버로 시작하기</button>
-            <button className='login-btn3'>
+            <button className='login-btn3'  onClick={handleClick}>
               <img className='login-google' src={Google}/>
               Google로 시작하기</button>
           </div>
