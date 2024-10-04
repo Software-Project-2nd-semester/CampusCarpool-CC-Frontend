@@ -13,10 +13,18 @@ const KakaoMap = () => {
     longitude: 126.570667,
   });
 
-  const [keyWord, setKeyWord] = useState('');
+  const [keyWordStart, setKeyWordStart] = useState<string>('');
+  const [keyWordEnd, setKeyWordEnd] = useState<string>('');
+  const [isTrue, setIsTrue] = useState<boolean>(true);
   const [placeList, setPlaceList] = useState<any[]>([]);
   const [markers, setMarkers] = useState<any[]>([]);
-  const [map1, setMap1] = useState<any>(null);
+  const [currentMap, setCurrentMap] = useState<any>(null);
+  const [startEndPoint, setStartEndPoint] = useState<any>({
+    startPoint: { address_name: "", startPoint_x: "", startPoint_y: "" },
+    endPoint: { address_name: "", endPoint_x: "", endPoint_y: "" },
+  });
+  console.log("🚀 ~ KakaoMap ~ startEndPoint:", startEndPoint)
+
 
   // 현재위치 받아오기 성공
   const success = (position: any) => {
@@ -42,21 +50,22 @@ const KakaoMap = () => {
   }, []);
 
   // 검색 실행 함수
-  const SearchPlaces = () => {
+  const SearchPlaces = (keyWord: string, isTrue: boolean) => {
+    setIsTrue(isTrue);
+
     const ps = new window.kakao.maps.services.Places();
 
-    if (!(!keyWord || keyWord.trim() === '' || !map1)) {
+    if (!(!keyWord || keyWord.trim() === '' || !currentMap)) {
       ps.keywordSearch(keyWord, PlacesSearchCB);
     } else {
-      console.log("검색어를 입력해주세요");
+      alert("검색어를 입력해주세요");
     }
   };
 
   // 검색 콜백 함수
-  const PlacesSearchCB = (data: any, status: any, pagination: any) => {
+  const PlacesSearchCB = (data: any, status: any) => {
     if (status === window.kakao.maps.services.Status.OK) {
       DisplayPlaces(data);
-
     } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
       alert('검색 결과가 존재하지 않습니다.');
     } else if (status === window.kakao.maps.services.Status.ERROR) {
@@ -75,11 +84,12 @@ const KakaoMap = () => {
       const position = new window.kakao.maps.LatLng(place.y, place.x);
       const marker = new window.kakao.maps.Marker({
         position: position,
-        map: map1,
+        map: currentMap,
       });
-      marker.setMap(map1);
+      marker.setMap(currentMap);
       return marker;
     });
+
     // 새로운 마커 업데이트
     setMarkers(newMarkers);
 
@@ -87,18 +97,35 @@ const KakaoMap = () => {
     const firstPlace = places[0];
     const newCenter = new window.kakao.maps.LatLng(firstPlace.y, firstPlace.x);
 
-    map1.setCenter(newCenter);
+    currentMap.setCenter(newCenter);
   }
 
+  const preventScroll = (e: TouchEvent) => {
+    e.preventDefault();
+  };
+
+  const UpdateStartEndPoint = (place: any, isStart: boolean) => {
+    const newPoint = {
+      address_name: place.place_name,
+      [`${isStart ? 'startPoint' : 'endPoint'}_x`]: place.x,
+      [`${isStart ? 'startPoint' : 'endPoint'}_y`]: place.y,
+    };
+
+    setStartEndPoint((prev: any) => ({
+      ...prev,
+      ...(isStart ? { startPoint: newPoint } : { endPoint: newPoint }),
+    }));
+  }
 
   useEffect(() => {
     const container = document.getElementById("map");
     const options = {
       center: new window.kakao.maps.LatLng(location.latitude, location.longitude),
       level: 3,
+      draggable: true,
     };
     const map = new window.kakao.maps.Map(container, options);
-    setMap1(map);
+    setCurrentMap(map);
 
     // 현재 위치 마커
     const markerPosition = new window.kakao.maps.LatLng(location.latitude, location.longitude);
@@ -107,6 +134,14 @@ const KakaoMap = () => {
     });
 
     marker.setMap(map);
+
+
+    container?.addEventListener('touchmove', preventScroll);
+
+    return () => {
+      container?.removeEventListener('touchmove', preventScroll);
+    };
+
   }, [location]);
 
   return (
@@ -114,14 +149,21 @@ const KakaoMap = () => {
       <div id="map" style={{ height: "400px" }}></div>
       <input
         type="text"
-        value={keyWord}
-        onChange={(e) => setKeyWord(e.target.value)}
-        placeholder="장소 검색"
+        value={keyWordStart}
+        onChange={(e) => setKeyWordStart(e.target.value)}
+        placeholder="출발지 검색"
       />
-      <button onClick={SearchPlaces}>검색하기</button>
+      <button onClick={() => { SearchPlaces(keyWordStart, true) }}>검색하기</button>
+      <input
+        type="text"
+        value={keyWordEnd}
+        onChange={(e) => setKeyWordEnd(e.target.value)}
+        placeholder="도착지 검색"
+      />
+      <button onClick={() => { SearchPlaces(keyWordEnd, false) }}>검색하기</button>
       <ul>
         {placeList.map((place, idx) => (
-          <li key={idx}>
+          <li key={idx} onClick={() => { UpdateStartEndPoint(place, isTrue) }}>
             {place.place_name}
           </li>
         ))}
