@@ -26,7 +26,6 @@ const KakaoMap = () => {
     startMarker: null,
     endMarker: null,
   });
-  console.log("🚀 ~ KakaoMap ~ startEndMarker:", startEndMarker)
 
   // 현재위치 받아오기 성공
   const success = (position: any) => {
