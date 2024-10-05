@@ -17,14 +17,16 @@ const KakaoMap = () => {
   const [keyWordEnd, setKeyWordEnd] = useState<string>('');
   const [isTrue, setIsTrue] = useState<boolean>(true);
   const [placeList, setPlaceList] = useState<any[]>([]);
-  const [markers, setMarkers] = useState<any[]>([]);
   const [currentMap, setCurrentMap] = useState<any>(null);
   const [startEndPoint, setStartEndPoint] = useState<any>({
-    startPoint: { address_name: "", startPoint_x: "", startPoint_y: "" },
-    endPoint: { address_name: "", endPoint_x: "", endPoint_y: "" },
+    startPoint: { address_name: "", x: "", y: "" },
+    endPoint: { address_name: "", x: "", y: "" },
   });
-  console.log("🚀 ~ KakaoMap ~ startEndPoint:", startEndPoint)
-
+  const [startEndMarker, setStartEndMarker] = useState<any>({
+    startMarker: null,
+    endMarker: null,
+  });
+  console.log("🚀 ~ KakaoMap ~ startEndMarker:", startEndMarker)
 
   // 현재위치 받아오기 성공
   const success = (position: any) => {
@@ -76,22 +78,6 @@ const KakaoMap = () => {
   const DisplayPlaces = (places: any) => {
     // 장소 목록 추가
     setPlaceList(places);
-    // 이전 마커 제거
-    markers.forEach(marker => marker.setMap(null));
-
-    // 새로운 마커 생성
-    const newMarkers = places.map((place: any) => {
-      const position = new window.kakao.maps.LatLng(place.y, place.x);
-      const marker = new window.kakao.maps.Marker({
-        position: position,
-        map: currentMap,
-      });
-      marker.setMap(currentMap);
-      return marker;
-    });
-
-    // 새로운 마커 업데이트
-    setMarkers(newMarkers);
 
     // 지도 중심 이동
     const firstPlace = places[0];
@@ -104,18 +90,77 @@ const KakaoMap = () => {
     e.preventDefault();
   };
 
-  const UpdateStartEndPoint = (place: any, isStart: boolean) => {
+  const UpdateStartEndPoint = (place: any, isTrue: boolean) => {
     const newPoint = {
       address_name: place.place_name,
-      [`${isStart ? 'startPoint' : 'endPoint'}_x`]: place.x,
-      [`${isStart ? 'startPoint' : 'endPoint'}_y`]: place.y,
+      x: place.x,
+      y: place.y,
     };
 
     setStartEndPoint((prev: any) => ({
       ...prev,
-      ...(isStart ? { startPoint: newPoint } : { endPoint: newPoint }),
+      ...(isTrue ? { startPoint: newPoint } : { endPoint: newPoint }),
     }));
   }
+
+  // 출발지, 도착지 아이콘 생성 및 이동
+  useEffect(() => {
+    if (isTrue && startEndPoint.startPoint.x && startEndPoint.startPoint.y) {
+      if (startEndMarker.startMarker) {
+        startEndMarker.startMarker.setMap(null);
+      }
+
+      const startSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png',
+        startSize = new window.kakao.maps.Size(50, 45),
+        startOption = {
+          offset: new window.kakao.maps.Point(15, 43)
+        };
+
+      const startImage = new window.kakao.maps.MarkerImage(startSrc, startSize, startOption);
+
+      const startPosition = new window.kakao.maps.LatLng(startEndPoint.startPoint.y, startEndPoint.startPoint.x);
+
+      const newStartMarker = new window.kakao.maps.Marker({
+        map: currentMap,
+        position: startPosition,
+        draggable: true,
+        image: startImage,
+      });
+
+      setStartEndMarker((prev: any) => ({
+        ...prev,
+        startMarker: newStartMarker,
+      }));
+    }
+
+    if (!isTrue && startEndPoint.endPoint.x && startEndPoint.endPoint.y) {
+      if (startEndMarker.endMarker) {
+        startEndMarker.endMarker.setMap(null);
+      }
+
+      const arriveSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png',
+        arriveSize = new window.kakao.maps.Size(50, 45),
+        arriveOption = {
+          offset: new window.kakao.maps.Point(15, 43)
+        };
+
+      const arriveImage = new window.kakao.maps.MarkerImage(arriveSrc, arriveSize, arriveOption);
+
+      const arrivePosition = new window.kakao.maps.LatLng(startEndPoint.endPoint.y, startEndPoint.endPoint.x);
+
+      const newEndMarker = new window.kakao.maps.Marker({
+        map: currentMap,
+        position: arrivePosition,
+        draggable: true,
+        image: arriveImage,
+      });
+
+      setStartEndMarker((prev: any) => ({
+        ...prev,
+        endMarker: newEndMarker,
+      }));
+    }
+  }, [startEndPoint]);
 
   useEffect(() => {
     const container = document.getElementById("map");
@@ -172,4 +217,4 @@ const KakaoMap = () => {
   );
 };
 
-export default KakaoMap;
+export default KakaoMap;  
