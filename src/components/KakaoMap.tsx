@@ -12,7 +12,7 @@ const KakaoMap = () => {
     latitude: 33.450701,
     longitude: 126.570667,
   });
-
+  // 깃 이상해
   const [keyWordStart, setKeyWordStart] = useState<string>('');
   const [keyWordEnd, setKeyWordEnd] = useState<string>('');
   const [isTrue, setIsTrue] = useState<boolean>(true);
