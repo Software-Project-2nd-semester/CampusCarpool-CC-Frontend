@@ -12,7 +12,6 @@ const KakaoMap = () => {
     latitude: 33.450701,
     longitude: 126.570667,
   });
-  // 깃 이상해
   const [keyWordStart, setKeyWordStart] = useState<string>('');
   const [keyWordEnd, setKeyWordEnd] = useState<string>('');
   const [isTrue, setIsTrue] = useState<boolean>(true);
@@ -22,6 +21,7 @@ const KakaoMap = () => {
     startPoint: { address_name: "", x: "", y: "" },
     endPoint: { address_name: "", x: "", y: "" },
   });
+  console.log(startEndPoint);
   const [startEndMarker, setStartEndMarker] = useState<any>({
     startMarker: null,
     endMarker: null,
@@ -91,7 +91,7 @@ const KakaoMap = () => {
 
   const UpdateStartEndPoint = (place: any, isTrue: boolean) => {
     const newPoint = {
-      address_name: place.place_name,
+      address_name: place.address_name,
       x: place.x,
       y: place.y,
     };
@@ -104,6 +104,8 @@ const KakaoMap = () => {
 
   // 출발지, 도착지 아이콘 생성 및 이동
   useEffect(() => {
+    const geocoder = new window.kakao.maps.services.Geocoder(); // Geocoder 객체 생성
+
     if (isTrue && startEndPoint.startPoint.x && startEndPoint.startPoint.y) {
       if (startEndMarker.startMarker) {
         startEndMarker.startMarker.setMap(null);
@@ -124,6 +126,28 @@ const KakaoMap = () => {
         position: startPosition,
         draggable: true,
         image: startImage,
+      });
+
+      // 드래그 끝났을 때 이벤트 처리
+      window.kakao.maps.event.addListener(newStartMarker, 'dragend', function () {
+        const latlng = newStartMarker.getPosition();  // 마커의 새 좌표 가져오기
+
+        // 좌표 -> 주소 변환
+        geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function (result: any, status: any) {
+          if (status === window.kakao.maps.services.Status.OK) {
+            const address = result[0].address.address_name;
+
+            // startEndPoint에 새로운 좌표 및 주소 업데이트
+            setStartEndPoint((prev: any) => ({
+              ...prev,
+              startPoint: {
+                address_name: address, // 변환한 주소를 저장
+                x: latlng.getLng(),
+                y: latlng.getLat(),
+              },
+            }));
+          }
+        });
       });
 
       setStartEndMarker((prev: any) => ({
@@ -152,6 +176,28 @@ const KakaoMap = () => {
         position: arrivePosition,
         draggable: true,
         image: arriveImage,
+      });
+
+      // 도착지 드래그 끝났을 때 이벤트 처리
+      window.kakao.maps.event.addListener(newEndMarker, 'dragend', function () {
+        const latlng = newEndMarker.getPosition();  // 마커의 새 좌표 가져오기
+
+        // 좌표 -> 주소 변환
+        geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function (result: any, status: any) {
+          if (status === window.kakao.maps.services.Status.OK) {
+            const address = result[0].address.address_name;
+
+            // startEndPoint에 새로운 좌표 및 주소 업데이트
+            setStartEndPoint((prev: any) => ({
+              ...prev,
+              endPoint: {
+                address_name: address, // 변환한 주소를 저장
+                x: latlng.getLng(),
+                y: latlng.getLat(),
+              },
+            }));
+          }
+        });
       });
 
       setStartEndMarker((prev: any) => ({
