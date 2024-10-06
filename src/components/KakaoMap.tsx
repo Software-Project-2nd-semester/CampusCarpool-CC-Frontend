@@ -1,4 +1,22 @@
 import React, { useEffect, useState } from "react";
+import GetDirection from "../api/kakaoMap/GetDirection";
+
+// useEffect(()=>{
+//   const fetchData = async() => {
+//     try {
+//       const data = await GetVideo(); 
+//       //const response = await GetProgram(' ');
+//       console.log('프로그램 api',programdata.data)
+//       setProgram(getRandomItems(programdata.data,5));
+//       setVideo(data.data);
+
+//     } catch (error) {
+//       return new Error(error)
+//     }
+//   };
+
+//   fetchData(); // 
+// },[])
 
 declare global {
   interface Window {
@@ -21,11 +39,24 @@ const KakaoMap = () => {
     startPoint: { address_name: "", x: "", y: "" },
     endPoint: { address_name: "", x: "", y: "" },
   });
-  console.log(startEndPoint);
   const [startEndMarker, setStartEndMarker] = useState<any>({
     startMarker: null,
     endMarker: null,
   });
+  const [currentPolyline, setCurrentPolyline] = useState<any>(null);
+
+  //길찾기API Get요청
+  useEffect(() => {
+    if (startEndPoint.startPoint.x && startEndPoint.endPoint.x) {
+      if (currentPolyline) {
+        currentPolyline.setMap(null);
+      }
+
+      GetDirection(startEndPoint, currentMap).then(newPolyline => {
+        setCurrentPolyline(newPolyline);
+      });
+    }
+  }, [startEndPoint]);
 
   // 현재위치 받아오기 성공
   const success = (position: any) => {
