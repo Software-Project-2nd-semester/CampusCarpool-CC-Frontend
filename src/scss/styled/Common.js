@@ -7,4 +7,8 @@ const Button = styled.button`
     color:white;
 `;
 
-export default Button;
+const StyledH3 = styled.h3`
+    ${tw`font-bold text-lg mt-8`}
+`;
+
+export { Button, StyledH3 };

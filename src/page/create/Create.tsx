@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import CreateImg from '../../assets/create/CreateImg.png';
-import Button from '../../scss/styled/Button';
+import { Button, StyledH3 } from '../../scss/styled/Common';
 import { ReactComponent as Driver } from '../../assets/create/Driver.svg'
 import { ReactComponent as Passenger } from '../../assets/create/Passenger.svg'
 import { ReactComponent as Taxi } from '../../assets/create/Taxi.svg'
@@ -26,12 +26,12 @@ const Create = () => {
         <img src={CreateImg} alt="create-img" />
       </div>
       <section>
-        <h2 className='font-bold text-lg'>카풀</h2>
+        <StyledH3 className='font-bold text-lg'>카풀</StyledH3>
         <div className='flex gap-x-6'>
           <Button onClick={NavigateCreateForm}><Driver />운전자</Button>
           <Button onClick={NavigateCreateForm}><Passenger />탑승자</Button>
         </div>
-        <h2 className='font-bold text-lg mt-9'>택시팟</h2>
+        <StyledH3 className='font-bold text-lg mt-9'>택시팟</StyledH3>
         <Button onClick={NavigateCreateForm}><Taxi />택시</Button>
       </section>
     </CreatePageWrapper>
