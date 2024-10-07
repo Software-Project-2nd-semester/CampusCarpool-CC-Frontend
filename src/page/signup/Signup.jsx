@@ -58,7 +58,7 @@ const Signup = () => {
 
   return (
   
-    <div className='signup-wrapper'>
+    <div className='signup-wrapper' style={{paddingBottom:'85px'}}>
       {!isSubmitted?
       
       (<form onSubmit={handleSubmit}>
