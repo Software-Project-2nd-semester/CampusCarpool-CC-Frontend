@@ -8,7 +8,7 @@ const Button = styled.button`
 `;
 
 const StyledH3 = styled.h3`
-    ${tw`font-bold text-lg mt-8`}
+    ${tw`font-bold text-xl mt-8 mb-2`}
 `;
 
 export { Button, StyledH3 };
