@@ -6,6 +6,7 @@ import { ReactComponent as Driver } from '../../assets/create/Driver.svg'
 import { ReactComponent as Passenger } from '../../assets/create/Passenger.svg'
 import { ReactComponent as Taxi } from '../../assets/create/Taxi.svg'
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const CreatePageWrapper = styled.div`
   ${tw`flex flex-col justify-evenly`}
@@ -15,8 +16,8 @@ const CreatePageWrapper = styled.div`
 const Create = () => {
   const navigate = useNavigate()
 
-  const NavigateCreateForm = () => {
-    navigate('/create/createForm');
+  const NavigateCreateForm = (category: string) => {
+    navigate('/create/createForm', { state: category });
   }
 
   return (
@@ -28,11 +29,11 @@ const Create = () => {
       <section>
         <StyledH3 className='font-bold text-lg'>카풀</StyledH3>
         <div className='flex gap-x-6'>
-          <Button onClick={NavigateCreateForm}><Driver />운전자</Button>
-          <Button onClick={NavigateCreateForm}><Passenger />탑승자</Button>
+          <Button onClick={() => NavigateCreateForm('driver')}><Driver />운전자</Button>
+          <Button onClick={() => NavigateCreateForm('passenger')}><Passenger />탑승자</Button>
         </div>
         <StyledH3 className='font-bold text-lg mt-9'>택시팟</StyledH3>
-        <Button onClick={NavigateCreateForm}><Taxi />택시</Button>
+        <Button onClick={() => NavigateCreateForm('taxi')}><Taxi />택시</Button>
       </section>
     </CreatePageWrapper>
   );

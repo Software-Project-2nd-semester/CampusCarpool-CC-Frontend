@@ -1,40 +1,30 @@
 import { useState } from 'react';
-import { Button, StyledH3 } from '../../../scss/styled/Common';
+import { Button, StyledH3, Footer } from '../../../scss/styled/Common';
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import { ReactComponent as Infomation } from '../../../assets/create/createForm/Infomation.svg'
+import { useLocation } from 'react-router-dom';
 
-const SelectButton = styled(Button) <{ isSelected: boolean }>`
+const SelectButton = styled(Button) <{ $isSelected: boolean }>`
     ${tw`w-1/3 text-base`}
-    background-color: ${({ isSelected }) => (isSelected ? '#4C3EED' : '#D0D0D0')};
-    color: ${({ isSelected }) => (isSelected ? 'white' : '#A7A7A7')};
+    background-color: ${({ $isSelected }) => ($isSelected ? '#4C3EED' : '#D0D0D0')};
+    color: ${({ $isSelected }) => ($isSelected ? 'white' : '#A7A7A7')};
 `;
 
 const SubmitButton = styled(Button)`
     ${tw`text-2xl`}
 `;
 
-const Footer = styled.footer`
-    ${tw`p-5`}
-    width: 100vw;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-
-    @media (min-width: 500px) {
-        transform: translateX(-50%);
-        left: 50%;
-        width:430px;
-    }
-`;
-
 const CreateForm = () => {
+    const location = useLocation();
+
     const [sameSex, setSameSex] = useState<boolean>(true);
     const [socialCarpoolMode, setSocialCarpoolMode] = useState<boolean>(true);
 
+    const category = location.state as string;
+
     return (
         <div>
-            <button>이전 버튼</button>
             <section>
                 <StyledH3>출발시간</StyledH3>
                 날짜, 시간을 선택해주세요(달력)
@@ -52,12 +42,12 @@ const CreateForm = () => {
                 <div className='flex gap-x-3'>
                     <SelectButton
                         onClick={() => { setSameSex(true); }}
-                        isSelected={sameSex}>
+                        $isSelected={sameSex}>
                         성별무관
                     </SelectButton>
                     <SelectButton
                         onClick={() => { setSameSex(false); }}
-                        isSelected={!sameSex}>
+                        $isSelected={!sameSex}>
                         동성만
                     </SelectButton>
                 </div>
@@ -67,12 +57,12 @@ const CreateForm = () => {
                 <div className='flex gap-x-3'>
                     <SelectButton
                         onClick={() => { setSocialCarpoolMode(true); }}
-                        isSelected={socialCarpoolMode}>
+                        $isSelected={socialCarpoolMode}>
                         활발하게
                     </SelectButton>
                     <SelectButton
                         onClick={() => { setSocialCarpoolMode(false); }}
-                        isSelected={!socialCarpoolMode}>
+                        $isSelected={!socialCarpoolMode}>
                         조용히
                     </SelectButton>
                 </div>
