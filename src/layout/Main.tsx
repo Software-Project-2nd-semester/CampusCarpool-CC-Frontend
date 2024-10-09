@@ -1,11 +1,17 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import styled from 'styled-components';
+
+const MainTag = styled.main`
+    padding:0 1.25rem;
+    margin: 68px 0 96px 0;
+`;
 
 const Main = () => {
     return (
-        <main className='main-wrapper p-5'>
+        <MainTag className='main-wrapper'>
             <Outlet />
-        </main>
+        </MainTag>
     );
 };
 
