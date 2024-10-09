@@ -11,4 +11,14 @@ const StyledH3 = styled.h3`
     ${tw`font-bold text-xl mt-8 mb-2`}
 `;
 
-export { Button, StyledH3 };
+const Footer = styled.footer`
+    ${tw`p-5 w-screen fixed bottom-0 left-0 bg-white`}
+    
+    @media (min-width: 500px) {
+        transform: translateX(-50%);
+        left: 50%;
+        width:430px;
+    }
+`;
+
+export { Button, StyledH3, Footer };
