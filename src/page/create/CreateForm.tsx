@@ -16,11 +16,18 @@ const SubmitButton = styled(Button)`
     ${tw`text-2xl`}
 `;
 
+const TextArea = styled.textarea`
+    width:100%;
+`;
+
 const CreateForm = () => {
     const location = useLocation();
 
+    const [maximumPeople,setMaximumPeople] = useState<number>(5);
     const [sameSex, setSameSex] = useState<boolean>(true);
     const [socialCarpoolMode, setSocialCarpoolMode] = useState<boolean>(true);
+    const [carInfo,setCarInfo] = useState<string>('');
+    const [content,setContent] = useState<string>('');
 
     const category = location.state as string;
 
@@ -36,7 +43,7 @@ const CreateForm = () => {
             </section>
             <section>
                 <StyledH3>최대인원</StyledH3>
-                <MaximumPeople/>
+                <MaximumPeople maximumPeople={maximumPeople} setMaximumPeople={setMaximumPeople}/>
             </section>
             <section>
                 <StyledH3>성별선택</StyledH3>
@@ -69,16 +76,17 @@ const CreateForm = () => {
                 </div>
                 <div className='flex mt-2 items-center gap-x-1'>
                     <Infomation />
-                    <i className='text-sm text-gray-400'>소셜카풀 : 운전자와 탑승자가 서로 가볍게 소통하며 가는 모드<br />조용히 : 운전자와 탑승자가 조용히 가는 모드</i>
+                    <i className='text-sm text-gray-400'>소셜카풀 : 서로 가볍게 소통하며 가는 모드<br />조용히 : 조용히 가는 모드</i>
                 </div>
             </section>
             <section>
                 <StyledH3>차량정보</StyledH3>
-                <input type="text" placeholder="차량 정보를 입력해주세요" />
+                <input type="text" value={carInfo} onChange={(e)=>{setCarInfo(e.target.value)}} placeholder="차량 정보를 입력해주세요" />
             </section>
             <section>
                 <StyledH3>이동설명</StyledH3>
-                <input type="text" placeholder="어떤 카풀인지 적어주세요" />
+                <TextArea value={content} onChange={(e)=>{setContent(e.target.value)}}  rows={5}  placeholder="이동에 대한 설명을 적어주세요!자세히 올리면 사용자에게 도움이 됩니다!
+                (예시 : 터미널에 1명 내리고 두정역으로 가요)" ></TextArea>
             </section>
             <Footer>
                 <SubmitButton>등록</SubmitButton>

@@ -1,25 +1,29 @@
-import { useState } from "react";
+import React from 'react';
 
-const MaximumPeople = () => {
-    const [maximumPeople,setMaximumPeople] = useState<number>(5);
+interface MaximumPeopleProps {
+    maximumPeople: number;
+    setMaximumPeople: React.Dispatch<React.SetStateAction<number>>;
+}
 
-    const DecreaseMaximumPeoPle = () => {
-        if(maximumPeople > 1){
-            setMaximumPeople(prev=>prev-1);
+const MaximumPeople = ({ maximumPeople, setMaximumPeople }:MaximumPeopleProps) => {
+
+    const DecreaseMaximumPeople = () => {
+        if (maximumPeople > 1) {
+            setMaximumPeople(prev => prev - 1);
         }
-    }
+    };
 
-    const IncreaseMaximumPeoPle = () => {
-        if(maximumPeople < 10){
-            setMaximumPeople(prev=>prev+1);
+    const IncreaseMaximumPeople = () => {
+        if (maximumPeople < 10) {
+            setMaximumPeople(prev => prev + 1);
         }
-    }
+    };
 
     return (
         <div>
-            <button onClick={DecreaseMaximumPeoPle}>-</button>
-                {maximumPeople}
-            <button onClick={IncreaseMaximumPeoPle}>+</button>
+            <button onClick={DecreaseMaximumPeople}>-</button>
+            {maximumPeople}
+            <button onClick={IncreaseMaximumPeople}>+</button>
         </div>
     );
 };
