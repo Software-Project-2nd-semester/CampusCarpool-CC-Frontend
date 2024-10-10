@@ -4,6 +4,8 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import { ReactComponent as Infomation } from '../../assets/create/createForm/Infomation.svg'
+import { ReactComponent as RightArrow } from '../../assets/create/createForm/RightArrow.svg'
+import { ReactComponent as Calendar } from '../../assets/create/createForm/Calendar.svg'
 import MaximumPeople from './components/MaximumPeople';
 
 const SelectButton = styled(Button) <{ $isSelected: boolean }>`
@@ -32,10 +34,16 @@ const CreateForm = () => {
     const category = location.state as string;
 
     return (
-        <div>
-            <section>
+        <>
+            <section className=''>
                 <StyledH3>출발시간</StyledH3>
-                날짜, 시간을 선택해주세요(달력)
+                <div className='flex justify-between items-center'>
+                    <div className='flex gap-x-3'>
+                        <p className='text-base text-gray-400'>날짜, 시간을 선택해주세요.</p>
+                        <Calendar/>
+                    </div>
+                    <RightArrow/>
+                </div>
             </section>
             <section>
                 <StyledH3>출발지 / 도착지</StyledH3>
@@ -91,7 +99,7 @@ const CreateForm = () => {
             <Footer>
                 <SubmitButton>등록</SubmitButton>
             </Footer>
-        </div>
+        </>
     );
 };
 
