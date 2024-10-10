@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom';
 import Footer from './Footer';
 import Main from './Main';
 import Header from './Header';
+import Anchor from './Anchor';
 
 const Layout = () => {
   const location = useLocation();
@@ -16,6 +17,7 @@ const Layout = () => {
   return (
     <>
       {showHeader && <Header />}
+      {showHeader && <Anchor/>}
       <Main />
       {showFooter && <Footer />} {/* 조건에 따라 Footer를 렌더링 */}
     </>

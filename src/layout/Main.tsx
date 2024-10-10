@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const MainTag = styled.main`
     padding:0 1.25rem;
-    margin: 68px 0 96px 0;
+    height:100vh;
 `;
 
 const Main = () => {
