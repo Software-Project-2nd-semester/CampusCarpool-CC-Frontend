@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Button, StyledH3, Footer } from '../../../scss/styled/Common';
+import { Button, StyledH3, Footer } from '../../scss/styled/Common';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import { ReactComponent as Infomation } from '../../../assets/create/createForm/Infomation.svg'
-import { useLocation } from 'react-router-dom';
+import { ReactComponent as Infomation } from '../../assets/create/createForm/Infomation.svg'
+import MaximumPeople from './components/MaximumPeople';
 
 const SelectButton = styled(Button) <{ $isSelected: boolean }>`
     ${tw`w-1/3 text-base`}
@@ -35,7 +36,7 @@ const CreateForm = () => {
             </section>
             <section>
                 <StyledH3>최대인원</StyledH3>
-                <input type="number" placeholder="인원선택하는 부분" />
+                <MaximumPeople/>
             </section>
             <section>
                 <StyledH3>성별선택</StyledH3>

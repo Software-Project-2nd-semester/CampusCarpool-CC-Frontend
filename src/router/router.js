@@ -11,7 +11,7 @@ const Login = lazy(() => import('../page/login/Login'))
 const Map = lazy(() => import('../page/map/Map'))
 const Signup = lazy(() => import('../page/signup/Signup'))
 const User = lazy(() => import('../page/user/User'));
-const CreateForm = lazy(() => import('../page/create/components/CreateForm'));
+const CreateForm = lazy(() => import('../page/create/CreateForm'));
 
 const router = createBrowserRouter([
   {
