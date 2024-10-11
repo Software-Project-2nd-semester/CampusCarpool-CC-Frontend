@@ -6,11 +6,10 @@ import { ReactComponent as Driver } from '../../assets/create/Driver.svg'
 import { ReactComponent as Passenger } from '../../assets/create/Passenger.svg'
 import { ReactComponent as Taxi } from '../../assets/create/Taxi.svg'
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 
 const CreatePageWrapper = styled.div`
   ${tw`flex flex-col justify-evenly`}
-  height:calc(100vh - 120px);
+  height:calc(100vh - 160px);
 `;
 
 const Create = () => {
