@@ -8,7 +8,7 @@ const Button = styled.button`
 `;
 
 const StyledH3 = styled.h3`
-    ${tw`font-bold text-xl mt-8 mb-2`}
+    ${tw`font-bold text-xl mb-2`}
 `;
 
 const Header = styled.header`
