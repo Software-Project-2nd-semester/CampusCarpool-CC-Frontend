@@ -12,7 +12,7 @@ const StyledH3 = styled.h3`
 `;
 
 const Header = styled.header`
-    ${tw`w-screen fixed top-0 left-0 bg-white flex px-5 `}
+    ${tw`w-screen fixed top-0 left-0 bg-white flex px-5 z-10`}
     height:80px;
 
     @media (min-width: 500px) {
