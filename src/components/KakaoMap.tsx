@@ -1,30 +1,17 @@
 import React, { useEffect, useState } from "react";
 import GetDirection from "../api/kakaoMap/GetDirection";
 
-// useEffect(()=>{
-//   const fetchData = async() => {
-//     try {
-//       const data = await GetVideo(); 
-//       //const response = await GetProgram(' ');
-//       console.log('프로그램 api',programdata.data)
-//       setProgram(getRandomItems(programdata.data,5));
-//       setVideo(data.data);
-
-//     } catch (error) {
-//       return new Error(error)
-//     }
-//   };
-
-//   fetchData(); // 
-// },[])
-
 declare global {
   interface Window {
     kakao: any;
   }
 }
 
-const KakaoMap = () => {
+interface OwnProps {
+  type: string
+}
+
+const KakaoMap = ({ type }: OwnProps) => {
   // 현재 위치
   const [location, setLocation] = useState({
     latitude: 33.450701,
@@ -39,6 +26,7 @@ const KakaoMap = () => {
     startPoint: { address_name: "", x: "", y: "" },
     endPoint: { address_name: "", x: "", y: "" },
   });
+
   const [startEndMarker, setStartEndMarker] = useState<any>({
     startMarker: null,
     endMarker: null,
@@ -268,20 +256,27 @@ const KakaoMap = () => {
   return (
     <div>
       <div id="map" style={{ height: "400px" }}></div>
-      <input
-        type="text"
-        value={keyWordStart}
-        onChange={(e) => setKeyWordStart(e.target.value)}
-        placeholder="출발지 검색"
-      />
-      <button onClick={() => { SearchPlaces(keyWordStart, true) }}>검색하기</button>
-      <input
-        type="text"
-        value={keyWordEnd}
-        onChange={(e) => setKeyWordEnd(e.target.value)}
-        placeholder="도착지 검색"
-      />
-      <button onClick={() => { SearchPlaces(keyWordEnd, false) }}>검색하기</button>
+      {type === 'origin' ?
+        <>
+          <input
+            type="text"
+            value={keyWordStart}
+            onChange={(e) => setKeyWordStart(e.target.value)}
+            placeholder="출발지 검색"
+          />
+          <button onClick={() => { SearchPlaces(keyWordStart, true) }}>검색하기</button>
+        </>
+        :
+        <>
+          <input
+            type="text"
+            value={keyWordEnd}
+            onChange={(e) => setKeyWordEnd(e.target.value)}
+            placeholder="도착지 검색"
+          />
+          <button onClick={() => { SearchPlaces(keyWordEnd, false) }}>검색하기</button>
+        </>
+      }
       <ul>
         {placeList.map((place, idx) => (
           <li key={idx} onClick={() => { UpdateStartEndPoint(place, isTrue) }}>
