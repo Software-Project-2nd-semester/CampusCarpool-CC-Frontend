@@ -1,8 +1,8 @@
 import { useLocation } from 'react-router-dom';
 import Footer from './Footer';
 import Main from './Main';
-import Header from './Header';
-import Anchor from './Anchor';
+import HeaderDefault from './HeaderDefault';
+import HeaderBack from './HeaderBack';
 
 const Layout = () => {
   const location = useLocation();
@@ -11,13 +11,17 @@ const Layout = () => {
   const showFooterPaths = ['/home', '/chat', '/create', '/user', '/map']; // Footer를 표시할 경로를 여기에 추가
   const showFooter = showFooterPaths.includes(location.pathname);
 
-  const showHeaderPaths = ['/create/createForm'];
-  const showHeader = showHeaderPaths.includes(location.pathname);
+  const showHeaderDefaultPaths = ['/home', '/chat', '/create', '/user', '/map'];
+  const showHeaderDefault = showHeaderDefaultPaths.includes(location.pathname);
+
+  const showHeaderBackPaths = ['/create/createForm'];
+  const showHeaderBack = showHeaderBackPaths.includes(location.pathname);
+
 
   return (
     <>
-      {showHeader && <Header />}
-      {showHeader && <Anchor/>}
+      {showHeaderDefault && <HeaderDefault />}
+      {showHeaderBack && <HeaderBack />}
       <Main />
       {showFooter && <Footer />} {/* 조건에 따라 Footer를 렌더링 */}
     </>
