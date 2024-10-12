@@ -64,7 +64,7 @@ const CreateForm = () => {
                         <StyledH3>출발시간</StyledH3>
                         <InputButton>
                             <div className='flex gap-x-3'>
-                                <p className='text-gray-400'>날짜, 시간을 선택해주세요.</p>
+                                <p className='text-gray-400 text-base'>날짜, 시간을 선택해주세요.</p>
                                 <Calendar />
                             </div>
                             <RightArrow />
@@ -76,7 +76,7 @@ const CreateForm = () => {
                         <InputButton onClick={() => { OpenLocationList("origin") }}>
                             <div className='flex gap-x-3'>
                                 <Origin />
-                                <p className='text-gray-400'>출발지를 입력해주세요.</p>
+                                <p className='text-gray-400 text-base'>출발지를 입력해주세요.</p>
                             </div>
                             <RightArrow />
                         </InputButton >
@@ -84,7 +84,7 @@ const CreateForm = () => {
                         <InputButton onClick={() => { OpenLocationList("destination") }}>
                             <div className='flex gap-x-3'>
                                 <Destination />
-                                <p className='text-gray-400'>도착지를 입력해주세요.</p>
+                                <p className='text-gray-400 text-base'>도착지를 입력해주세요.</p>
                             </div>
                             <RightArrow />
                         </InputButton>
@@ -133,13 +133,13 @@ const CreateForm = () => {
 
                     <MtSection>
                         <StyledH3>차량정보</StyledH3>
-                        <input type="text" value={carInfo} onChange={(e) => { setCarInfo(e.target.value) }} placeholder="차량 정보를 입력해주세요" />
+                        <input type="text" value={carInfo} onChange={(e) => { setCarInfo(e.target.value) }} placeholder="차량 정보를 입력해주세요" className='text-base' />
                     </MtSection>
 
                     <MtSection>
                         <StyledH3>이동설명</StyledH3>
                         <TextArea value={content} onChange={(e) => { setContent(e.target.value) }} rows={5} placeholder="이동에 대한 설명을 적어주세요!자세히 올리면 사용자에게 도움이 됩니다!
-                (예시 : 터미널에 1명 내리고 두정역으로 가요)" ></TextArea>
+                (예시 : 터미널에 1명 내리고 두정역으로 가요)" className='text-base'></TextArea>
                     </MtSection>
 
                     <Footer>
