@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import GetDirection from "../api/kakaoMap/GetDirection";
+import useKakaoMapStore from "../store/kakaoMapStore";
 
 declare global {
   interface Window {
@@ -13,20 +14,16 @@ interface OwnProps {
 
 const KakaoMap = ({ type }: OwnProps) => {
   // 현재 위치
-  const [location, setLocation] = useState({
-    latitude: 33.450701,
-    longitude: 126.570667,
-  });
+  const location = useKakaoMapStore((state) => state.location);
+  const setLocation = useKakaoMapStore((state) => state.setLocation);
+  const startEndPoint = useKakaoMapStore((state) => state.startEndPoint);
+  const setStartEndPoint = useKakaoMapStore((state) => state.setStartEndPoint);
+
   const [keyWordStart, setKeyWordStart] = useState<string>('');
   const [keyWordEnd, setKeyWordEnd] = useState<string>('');
-  const [isTrue, setIsTrue] = useState<boolean>(true);
+  const [isOrigin, setIsOrigin] = useState<boolean>(true);
   const [placeList, setPlaceList] = useState<any[]>([]);
   const [currentMap, setCurrentMap] = useState<any>(null);
-  const [startEndPoint, setStartEndPoint] = useState<any>({
-    startPoint: { address_name: "", x: "", y: "" },
-    endPoint: { address_name: "", x: "", y: "" },
-  });
-
   const [startEndMarker, setStartEndMarker] = useState<any>({
     startMarker: null,
     endMarker: null,
@@ -70,8 +67,8 @@ const KakaoMap = ({ type }: OwnProps) => {
   }, []);
 
   // 검색 실행 함수
-  const SearchPlaces = (keyWord: string, isTrue: boolean) => {
-    setIsTrue(isTrue);
+  const SearchPlaces = (keyWord: string, isOrigin: boolean) => {
+    setIsOrigin(isOrigin);
 
     const ps = new window.kakao.maps.services.Places();
 
@@ -108,24 +105,21 @@ const KakaoMap = ({ type }: OwnProps) => {
     e.preventDefault();
   };
 
-  const UpdateStartEndPoint = (place: any, isTrue: boolean) => {
+  const UpdateStartEndPoint = (place: any) => {
     const newPoint = {
       address_name: place.address_name,
       x: place.x,
       y: place.y,
     };
 
-    setStartEndPoint((prev: any) => ({
-      ...prev,
-      ...(isTrue ? { startPoint: newPoint } : { endPoint: newPoint }),
-    }));
+    setStartEndPoint(newPoint, isOrigin);
   }
 
   // 출발지, 도착지 아이콘 생성 및 이동
   useEffect(() => {
     const geocoder = new window.kakao.maps.services.Geocoder(); // Geocoder 객체 생성
 
-    if (isTrue && startEndPoint.startPoint.x && startEndPoint.startPoint.y) {
+    if (isOrigin && startEndPoint.startPoint.x && startEndPoint.startPoint.y) {
       if (startEndMarker.startMarker) {
         startEndMarker.startMarker.setMap(null);
       }
@@ -155,16 +149,14 @@ const KakaoMap = ({ type }: OwnProps) => {
         geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function (result: any, status: any) {
           if (status === window.kakao.maps.services.Status.OK) {
             const address = result[0].address.address_name;
+            const startPoint = {
+              address_name: address, // 변환한 주소를 저장
+              x: latlng.getLng(),
+              y: latlng.getLat(),
+            }
 
             // startEndPoint에 새로운 좌표 및 주소 업데이트
-            setStartEndPoint((prev: any) => ({
-              ...prev,
-              startPoint: {
-                address_name: address, // 변환한 주소를 저장
-                x: latlng.getLng(),
-                y: latlng.getLat(),
-              },
-            }));
+            setStartEndPoint(startPoint, isOrigin);
           }
         });
       });
@@ -175,7 +167,7 @@ const KakaoMap = ({ type }: OwnProps) => {
       }));
     }
 
-    if (!isTrue && startEndPoint.endPoint.x && startEndPoint.endPoint.y) {
+    if (!isOrigin && startEndPoint.endPoint.x && startEndPoint.endPoint.y) {
       if (startEndMarker.endMarker) {
         startEndMarker.endMarker.setMap(null);
       }
@@ -205,16 +197,22 @@ const KakaoMap = ({ type }: OwnProps) => {
         geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function (result: any, status: any) {
           if (status === window.kakao.maps.services.Status.OK) {
             const address = result[0].address.address_name;
-
+            const endPoint = {
+              address_name: address, // 변환한 주소를 저장
+              x: latlng.getLng(),
+              y: latlng.getLat(),
+            }
             // startEndPoint에 새로운 좌표 및 주소 업데이트
-            setStartEndPoint((prev: any) => ({
-              ...prev,
-              endPoint: {
-                address_name: address, // 변환한 주소를 저장
-                x: latlng.getLng(),
-                y: latlng.getLat(),
-              },
-            }));
+            setStartEndPoint(endPoint, isOrigin);
+
+            // setStartEndPoint((prev: any) => ({
+            //   ...prev,
+            // endPoint: {
+            //   address_name: address, // 변환한 주소를 저장
+            //   x: latlng.getLng(),
+            //   y: latlng.getLat(),
+            // },
+            // }));
           }
         });
       });
@@ -279,7 +277,7 @@ const KakaoMap = ({ type }: OwnProps) => {
       }
       <ul>
         {placeList.map((place, idx) => (
-          <li key={idx} onClick={() => { UpdateStartEndPoint(place, isTrue) }}>
+          <li key={idx} onClick={() => { UpdateStartEndPoint(place) }}>
             {place.place_name}
           </li>
         ))}

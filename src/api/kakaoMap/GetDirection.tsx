@@ -22,7 +22,7 @@ const GetDirection = async (startEndPoint: any, currentMap: any) => {
             },
         });
 
-        console.log(response.data);
+        //console.log(response.data);
 
         const data = response.data;
         data.routes[0].sections[0].roads.forEach((router: any) => {
