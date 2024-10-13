@@ -1,0 +1,97 @@
+.my-wrapper{
+  display:flex;
+  flex-direction: column;
+
+ .con1{
+  display:flex;
+  gap:16px;
+  padding-bottom: 16px;
+  overflow: visible; /* 기본값 */
+  img{
+    width:54px;
+    height:54px;
+  }
+  .nick{
+    font-size:16px;
+    font-weight: bold;
+  }
+  .intro{
+    font-size:12px;
+    font-weight: 300;
+  }
+ }
+
+.border{
+  width:calc(100% + 40px);
+  border-bottom: solid #c1c1c1 10px;
+  position: relative; 
+  left:-20px;
+  
+}
+.con2{
+  padding-top: 18px;
+  .scorebox{
+    padding: 12px 18px;
+    border-radius: 4px;
+    border: solid 2px #4c3eed;
+    display:flex;
+    margin:4px;
+    gap:30px;
+    .score{
+      // width:25%;
+      // width:calc((100% - 40px) * 0.3);
+      font-weight: bold;
+      font-size:16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .rank{
+      // width:75%;
+      // width:calc((100% - 40px) * 0.7);
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+  .box-container{
+    flex-wrap: wrap;
+    .box{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width:33%;
+      
+      img{
+        padding-top:20px;
+        padding-bottom: 16px;
+        width:30px;
+        height:30px;
+        box-sizing: content-box;
+      }
+      p{
+        margin-bottom:12px;
+      }
+    }
+  }
+}
+.con3{
+  display: flex;
+  flex-direction: column;
+  gap:20px;
+  .text-con{
+    padding-right: 24px;
+    display: flex;
+    justify-content: space-between;
+    .text{
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .arrow{
+      font-size: 24px;
+      line-height: 24px;
+    }
+  }
+}
+
+}
