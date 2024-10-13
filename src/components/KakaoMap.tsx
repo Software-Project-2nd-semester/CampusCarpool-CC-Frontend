@@ -18,16 +18,15 @@ const KakaoMap = ({ type }: OwnProps) => {
   const setLocation = useKakaoMapStore((state) => state.setLocation);
   const startEndPoint = useKakaoMapStore((state) => state.startEndPoint);
   const setStartEndPoint = useKakaoMapStore((state) => state.setStartEndPoint);
+  const currentMap = useKakaoMapStore((state) => state.currentMap);
+  const setCurrentMap = useKakaoMapStore((state) => state.setCurrentMap);
+  const startEndMarker = useKakaoMapStore((state) => state.startEndMarker);
+  const setStartEndMarker = useKakaoMapStore((state) => state.setStartEndMarker);
 
   const [keyWordStart, setKeyWordStart] = useState<string>('');
   const [keyWordEnd, setKeyWordEnd] = useState<string>('');
   const [isOrigin, setIsOrigin] = useState<boolean>(true);
   const [placeList, setPlaceList] = useState<any[]>([]);
-  const [currentMap, setCurrentMap] = useState<any>(null);
-  const [startEndMarker, setStartEndMarker] = useState<any>({
-    startMarker: null,
-    endMarker: null,
-  });
   const [currentPolyline, setCurrentPolyline] = useState<any>(null);
 
   //길찾기API Get요청
@@ -41,7 +40,7 @@ const KakaoMap = ({ type }: OwnProps) => {
         setCurrentPolyline(newPolyline);
       });
     }
-  }, [startEndPoint]);
+  }, [startEndPoint, currentMap]);
 
   // 현재위치 받아오기 성공
   const success = (position: any) => {
@@ -112,6 +111,10 @@ const KakaoMap = ({ type }: OwnProps) => {
       y: place.y,
     };
 
+    // 지도 중심 이동
+    const newCenter = new window.kakao.maps.LatLng(newPoint.y, newPoint.x);
+
+    currentMap.setCenter(newCenter);
     setStartEndPoint(newPoint, isOrigin);
   }
 
@@ -119,7 +122,7 @@ const KakaoMap = ({ type }: OwnProps) => {
   useEffect(() => {
     const geocoder = new window.kakao.maps.services.Geocoder(); // Geocoder 객체 생성
 
-    if (isOrigin && startEndPoint.startPoint.x && startEndPoint.startPoint.y) {
+    if (isOrigin && startEndPoint.startPoint) {
       if (startEndMarker.startMarker) {
         startEndMarker.startMarker.setMap(null);
       }
@@ -161,13 +164,10 @@ const KakaoMap = ({ type }: OwnProps) => {
         });
       });
 
-      setStartEndMarker((prev: any) => ({
-        ...prev,
-        startMarker: newStartMarker,
-      }));
+      setStartEndMarker(newStartMarker, isOrigin);
     }
 
-    if (!isOrigin && startEndPoint.endPoint.x && startEndPoint.endPoint.y) {
+    if (!isOrigin && startEndPoint.endPoint) {
       if (startEndMarker.endMarker) {
         startEndMarker.endMarker.setMap(null);
       }
@@ -217,12 +217,13 @@ const KakaoMap = ({ type }: OwnProps) => {
         });
       });
 
-      setStartEndMarker((prev: any) => ({
-        ...prev,
-        endMarker: newEndMarker,
-      }));
+      setStartEndMarker(newEndMarker, isOrigin);
+      // setStartEndMarker((prev: any) => ({
+      //   ...prev,
+      //   endMarker: newEndMarker,
+      // }));
     }
-  }, [startEndPoint]);
+  }, [startEndPoint, currentMap, isOrigin]);
 
   useEffect(() => {
     const container = document.getElementById("map");
@@ -241,7 +242,6 @@ const KakaoMap = ({ type }: OwnProps) => {
     });
 
     marker.setMap(map);
-
 
     container?.addEventListener('touchmove', preventScroll);
 

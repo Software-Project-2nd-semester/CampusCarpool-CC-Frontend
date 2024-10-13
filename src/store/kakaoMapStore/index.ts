@@ -16,6 +16,21 @@ interface KakaoMapState {
         isOrigin:boolean,
     )=>void;
 
+    // 현재 맵
+    currentMap : any;
+    setCurrentMap : (newCurrentMap:any)=>void;
+
+    // 출발지, 도착지 마커
+    startEndMarker : {
+        startMarker : any,
+        endMarker: any,
+    };
+
+    setStartEndMarker : (
+        newMarker : any,
+        isOrigin: boolean,
+    )=>void;
+
 }
 
 const useKakaoMapStore = create<KakaoMapState>((set) => ({
@@ -35,7 +50,24 @@ const useKakaoMapStore = create<KakaoMapState>((set) => ({
           ...state.startEndPoint,
           ...(isOrigin ? { startPoint: newPoint } : { endPoint: newPoint }),
         }
-      })),
+    })),
+
+    currentMap : null,
+    setCurrentMap : (newCurrentMap:any) => set(()=>({
+        currentMap : newCurrentMap
+    })),
+
+    startEndMarker : {
+        startMarker: null,
+        endMarker: null,
+    },
+
+    setStartEndMarker: (newMarker:any,isOrigin:boolean) => set((state)=>({
+        startEndMarker :{
+            ...state.startEndMarker,
+            ...(isOrigin?{startMarker:newMarker}:{endMarker:newMarker}),
+        }
+    })),
 
 }));
 
