@@ -9,7 +9,7 @@ import My from '../assets/layout/footer/my.svg';
 const Footer = () => {
   const navigate = useNavigate()
   return (
-    <div className='footer-wrapper'>
+    <div className='footer-wrapper' style={{backgroundColor:'white'}}>
       <div className='con1' onClick={() => navigate('/home')}>
         <img style={{ width: 34, height: 34 }} src={Home}></img>
         <div className='text'>홈</div>
