@@ -122,108 +122,62 @@ const KakaoMap = ({ type }: OwnProps) => {
   useEffect(() => {
     const geocoder = new window.kakao.maps.services.Geocoder(); // Geocoder 객체 생성
 
-    if (isOrigin && startEndPoint.startPoint) {
+    const createMarker = (point: any, isOrigin: boolean) => {
+      const markerSrc = (isOrigin ? 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png' : 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png');
+      const markerSize = new window.kakao.maps.Size(50, 45);
+      const markerOption = { offset: new window.kakao.maps.Point(15, 43) };
+      const markerImage = new window.kakao.maps.MarkerImage(markerSrc, markerSize, markerOption);
+
+      const markerPosition = new window.kakao.maps.LatLng(point.y, point.x);
+
+      const newMarker = new window.kakao.maps.Marker({
+        map: currentMap,
+        position: markerPosition,
+        draggable: true,
+        image: markerImage,
+      });
+
+      // 드래그 끝났을 때 이벤트 처리
+      window.kakao.maps.event.addListener(newMarker, 'dragend', function () {
+        const latlng = newMarker.getPosition();  // 마커의 새 좌표 가져오기
+        // 좌표 -> 주소 변환
+        geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function (result: any, status: any) {
+          if (status === window.kakao.maps.services.Status.OK) {
+            const address = result[0].address.address_name;
+            const newPoint = {
+              address_name: address, // 변환한 주소를 저장
+              x: latlng.getLng(),
+              y: latlng.getLat(),
+            }
+            // startEndPoint에 새로운 좌표 및 주소 업데이트
+            setStartEndPoint(newPoint, isOrigin);
+          }
+        });
+      });
+
+      return newMarker;
+    }
+
+    // 출발지 마커 생성 및 업데이트
+    if (startEndPoint.startPoint) {
       if (startEndMarker.startMarker) {
         startEndMarker.startMarker.setMap(null);
       }
 
-      const startSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png',
-        startSize = new window.kakao.maps.Size(50, 45),
-        startOption = {
-          offset: new window.kakao.maps.Point(15, 43)
-        };
-
-      const startImage = new window.kakao.maps.MarkerImage(startSrc, startSize, startOption);
-
-      const startPosition = new window.kakao.maps.LatLng(startEndPoint.startPoint.y, startEndPoint.startPoint.x);
-
-      const newStartMarker = new window.kakao.maps.Marker({
-        map: currentMap,
-        position: startPosition,
-        draggable: true,
-        image: startImage,
-      });
-
-      // 드래그 끝났을 때 이벤트 처리
-      window.kakao.maps.event.addListener(newStartMarker, 'dragend', function () {
-        const latlng = newStartMarker.getPosition();  // 마커의 새 좌표 가져오기
-
-        // 좌표 -> 주소 변환
-        geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function (result: any, status: any) {
-          if (status === window.kakao.maps.services.Status.OK) {
-            const address = result[0].address.address_name;
-            const startPoint = {
-              address_name: address, // 변환한 주소를 저장
-              x: latlng.getLng(),
-              y: latlng.getLat(),
-            }
-
-            // startEndPoint에 새로운 좌표 및 주소 업데이트
-            setStartEndPoint(startPoint, isOrigin);
-          }
-        });
-      });
-
-      setStartEndMarker(newStartMarker, isOrigin);
+      const newStartMarker = createMarker(startEndPoint.startPoint, true);
+      setStartEndMarker(newStartMarker, true);
     }
 
-    if (!isOrigin && startEndPoint.endPoint) {
+    // 도착지 마커 생성 및 업데이트
+    if (startEndPoint.endPoint) {
       if (startEndMarker.endMarker) {
         startEndMarker.endMarker.setMap(null);
       }
 
-      const arriveSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png',
-        arriveSize = new window.kakao.maps.Size(50, 45),
-        arriveOption = {
-          offset: new window.kakao.maps.Point(15, 43)
-        };
-
-      const arriveImage = new window.kakao.maps.MarkerImage(arriveSrc, arriveSize, arriveOption);
-
-      const arrivePosition = new window.kakao.maps.LatLng(startEndPoint.endPoint.y, startEndPoint.endPoint.x);
-
-      const newEndMarker = new window.kakao.maps.Marker({
-        map: currentMap,
-        position: arrivePosition,
-        draggable: true,
-        image: arriveImage,
-      });
-
-      // 도착지 드래그 끝났을 때 이벤트 처리
-      window.kakao.maps.event.addListener(newEndMarker, 'dragend', function () {
-        const latlng = newEndMarker.getPosition();  // 마커의 새 좌표 가져오기
-
-        // 좌표 -> 주소 변환
-        geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function (result: any, status: any) {
-          if (status === window.kakao.maps.services.Status.OK) {
-            const address = result[0].address.address_name;
-            const endPoint = {
-              address_name: address, // 변환한 주소를 저장
-              x: latlng.getLng(),
-              y: latlng.getLat(),
-            }
-            // startEndPoint에 새로운 좌표 및 주소 업데이트
-            setStartEndPoint(endPoint, isOrigin);
-
-            // setStartEndPoint((prev: any) => ({
-            //   ...prev,
-            // endPoint: {
-            //   address_name: address, // 변환한 주소를 저장
-            //   x: latlng.getLng(),
-            //   y: latlng.getLat(),
-            // },
-            // }));
-          }
-        });
-      });
-
-      setStartEndMarker(newEndMarker, isOrigin);
-      // setStartEndMarker((prev: any) => ({
-      //   ...prev,
-      //   endMarker: newEndMarker,
-      // }));
+      const newEndMarker = createMarker(startEndPoint.endPoint, false);
+      setStartEndMarker(newEndMarker, false);
     }
-  }, [startEndPoint, currentMap, isOrigin]);
+  }, [startEndPoint, currentMap]);
 
   useEffect(() => {
     const container = document.getElementById("map");
