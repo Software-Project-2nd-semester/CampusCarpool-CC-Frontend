@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const GetDirection = async (startEndPoint: any, currentMap: any) => {
+
     const REST_API_KEY = process.env.REACT_APP_KAKAO_MAP_REST_API_KEY;
     const url = 'https://apis-navi.kakaomobility.com/v1/directions';
 
@@ -22,9 +23,11 @@ const GetDirection = async (startEndPoint: any, currentMap: any) => {
             },
         });
 
-        // console.log(response.data);
-
         const data = response.data;
+
+        // 택시 요금 반환
+        const taxiCharge = data.routes[0].summary.fare.taxi;
+
         data.routes[0].sections[0].roads.forEach((router: any) => {
             router.vertexes.forEach((vertex: number, index: number) => {
                 if (index % 2 === 0) {
@@ -42,7 +45,7 @@ const GetDirection = async (startEndPoint: any, currentMap: any) => {
         });
 
         polyline.setMap(currentMap);
-        return polyline;
+        return { polyline, taxiCharge };
     } catch (error) {
         console.error('Error fetching directions:', error);
     }

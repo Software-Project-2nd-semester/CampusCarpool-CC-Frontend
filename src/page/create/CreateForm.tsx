@@ -35,13 +35,19 @@ const TextArea = styled.textarea`
 `;
 
 const MtSection = styled.section`
-    ${tw`mt-8`}
+    ${tw`mt-8`};
+    `;
+
+const TaxiSection = styled(MtSection) <{ $isSelected: boolean }>`
+    ${tw`flex justify-between`}
+    color:${({ $isSelected }) => ($isSelected ? 'black' : '#A7A7A7')};
 `;
 
 const CreateForm = () => {
     const location = useLocation();
 
     const startEndPoint = useKakaoMapStore((state) => state.startEndPoint);
+    const taxiCharge = useKakaoMapStore((state) => state.taxiCharge);
     const [maximumPeople, setMaximumPeople] = useState<number>(5);
     const [sameSex, setSameSex] = useState<boolean>(true);
     const [socialCarpoolMode, setSocialCarpoolMode] = useState<boolean>(true);
@@ -153,9 +159,22 @@ const CreateForm = () => {
 
                     <MtSection>
                         <StyledH3>이동 설명</StyledH3>
-                        <TextArea value={content} onChange={(e) => { setContent(e.target.value) }} rows={5} placeholder="이동에 대한 설명을 적어주세요!자세히 올리면 사용자에게 도움이 됩니다!
+                        <TextArea value={content} onChange={(e) => { setContent(e.target.value) }} rows={3} placeholder="이동에 대한 설명을 적어주세요!자세히 올리면 사용자에게 도움이 됩니다!
                         (예시 : 터미널에 1명 내리고 두정역으로 가요)" className='text-base'></TextArea>
                     </MtSection >
+
+                    {category === "taxi" &&
+                        <>
+                            <TaxiSection $isSelected={startEndPoint.startPoint.address_name && startEndPoint.endPoint.address_name}>
+                                <StyledH3>택시 예상 요금</StyledH3>
+                                <StyledH3>{taxiCharge}원</StyledH3>
+                            </TaxiSection>
+                            <TaxiSection $isSelected={startEndPoint.startPoint.address_name && startEndPoint.endPoint.address_name}>
+                                <StyledH3>1인당 지불할 예상 금액</StyledH3>
+                                <StyledH3>{~~(taxiCharge / maximumPeople)}원</StyledH3>
+                            </TaxiSection>
+                        </>
+                    }
 
                     <Footer>
                         <SubmitButton onClick={() => console.log("등록")}>등록</SubmitButton>

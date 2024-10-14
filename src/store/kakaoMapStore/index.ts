@@ -31,6 +31,9 @@ interface KakaoMapState {
         isOrigin: boolean,
     )=>void;
 
+    taxiCharge : number;
+    setTaxiCharge : (taxiCharge:number)=>void;
+
 }
 
 const useKakaoMapStore = create<KakaoMapState>((set) => ({
@@ -68,6 +71,9 @@ const useKakaoMapStore = create<KakaoMapState>((set) => ({
             ...(isOrigin?{startMarker:newMarker}:{endMarker:newMarker}),
         }
     })),
+
+    taxiCharge:0,
+    setTaxiCharge:(taxiCharge)=> set({taxiCharge}),
 
 }));
 
