@@ -22,6 +22,7 @@ const KakaoMap = ({ type }: OwnProps) => {
   const setCurrentMap = useKakaoMapStore((state) => state.setCurrentMap);
   const startEndMarker = useKakaoMapStore((state) => state.startEndMarker);
   const setStartEndMarker = useKakaoMapStore((state) => state.setStartEndMarker);
+  const setTaxiCharge = useKakaoMapStore((state) => state.setTaxiCharge);
 
   const [keyWordStart, setKeyWordStart] = useState<string>('');
   const [keyWordEnd, setKeyWordEnd] = useState<string>('');
@@ -36,8 +37,13 @@ const KakaoMap = ({ type }: OwnProps) => {
         currentPolyline.setMap(null);
       }
 
-      GetDirection(startEndPoint, currentMap).then(newPolyline => {
-        setCurrentPolyline(newPolyline);
+      GetDirection(startEndPoint, currentMap).then(result => {
+        if (result) {
+          const { polyline, taxiCharge } = result;
+
+          setCurrentPolyline(polyline);
+          setTaxiCharge(taxiCharge);
+        }
       });
     }
   }, [startEndPoint, currentMap]);
