@@ -19,7 +19,7 @@ const ModalDiv = styled.div`
 `;
 
 const ModalContent = styled.div`
-    ${tw`bg-white fixed w-full`};
+    ${tw`bg-white fixed w-full px-5`};
     bottom : 80px;
 `;
 

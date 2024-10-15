@@ -23,7 +23,7 @@ const Header = styled.header`
 `;
 
 const Footer = styled.footer`
-    ${tw`px-5 w-screen fixed bottom-0 left-0 bg-white flex items-center`}
+    ${tw`px-5 w-screen fixed bottom-0 left-0 bg-white flex items-center z-10`}
     height:80px;
     
     @media (min-width: 500px) {
