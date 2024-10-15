@@ -24,7 +24,8 @@ const GetDirection = async (startEndPoint: any, currentMap: any) => {
         });
 
         const data = response.data;
-
+        // 경로 소요 시간
+        const duration = data.routes[0].summary.duration;
         // 택시 요금 반환
         const taxiCharge = data.routes[0].summary.fare.taxi;
 
@@ -38,13 +39,15 @@ const GetDirection = async (startEndPoint: any, currentMap: any) => {
 
         const polyline = new window.kakao.maps.Polyline({
             path: linePath,
-            strokeWeight: 5,
-            strokeColor: '#ff0000',
-            strokeOpacity: 0.5,
+            strokeWeight: 6,
+            strokeColor: '#4C3EED',
+            strokeOpacity: 0.8,
             strokeStyle: 'solid',
         });
 
         polyline.setMap(currentMap);
+
+
         return { polyline, taxiCharge };
     } catch (error) {
         console.error('Error fetching directions:', error);

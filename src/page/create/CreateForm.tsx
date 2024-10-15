@@ -11,6 +11,7 @@ import { ReactComponent as Origin } from '../../assets/create/createForm/Origin.
 import { ReactComponent as DirectionArrow } from '../../assets/create/createForm/DirectionArrow.svg'
 import MaximumPeople from './components/MaximumPeople';
 import LocationList from './components/LocationList';
+import DateSettingModal from './components/DateSettingModal';
 import useKakaoMapStore from "../../store/kakaoMapStore";
 
 const SelectButton = styled(Button) <{ $isSelected: boolean }>`
@@ -26,6 +27,7 @@ const InputButton = styled.button`
 const SubmitButton = styled(Button)`
     ${tw`text-2xl`}
 `;
+
 const GrayBaseP = styled.p`
     ${tw`text-gray-400 text-base`}
 `;
@@ -36,7 +38,7 @@ const TextArea = styled.textarea`
 
 const MtSection = styled.section`
     ${tw`mt-8`};
-    `;
+`;
 
 const TaxiSection = styled(MtSection) <{ $isSelected: boolean }>`
     ${tw`flex justify-between`}
@@ -48,6 +50,9 @@ const CreateForm = () => {
 
     const startEndPoint = useKakaoMapStore((state) => state.startEndPoint);
     const taxiCharge = useKakaoMapStore((state) => state.taxiCharge);
+
+    const [date, setDate] = useState<string>('');
+    const [openDateSettingModal, setOpenDateSettingModal] = useState<boolean>(false);
     const [maximumPeople, setMaximumPeople] = useState<number>(5);
     const [sameSex, setSameSex] = useState<boolean>(true);
     const [socialCarpoolMode, setSocialCarpoolMode] = useState<boolean>(true);
@@ -71,11 +76,21 @@ const CreateForm = () => {
         <>
             {!openLocationList.isOpen ?
                 <>
+                    {/* Date선택 모달 */}
+                    {openDateSettingModal ?
+                        <DateSettingModal setDate={setDate} setOpenDateSettingModal={setOpenDateSettingModal} />
+                        :
+                        null
+                    }
                     <section>
                         <StyledH3>출발시간</StyledH3>
-                        <InputButton>
+                        <InputButton onClick={() => { setOpenDateSettingModal(true) }}>
                             <div className='flex gap-x-3'>
-                                <GrayBaseP>날짜, 시간을 선택해주세요.</GrayBaseP>
+                                {date ?
+                                    <p className='text-base'>{date}</p>
+                                    :
+                                    <GrayBaseP>날짜, 시간을 선택해주세요.</GrayBaseP>
+                                }
                                 <Calendar />
                             </div>
                             <RightArrow />
