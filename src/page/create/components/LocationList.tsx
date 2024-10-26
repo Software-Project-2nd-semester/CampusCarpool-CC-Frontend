@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 import { Button, StyledH3, Footer, Header } from '../../../scss/styled/Common';
-import KakaoMap from "../../../components/KakaoMap";
+import KakaoMapSearch from "./KakaoMapSearch";
 import { ReactComponent as Cancel } from '../../../assets/layout/header/Cancel.svg'
 
 interface OwnProps {
@@ -36,7 +36,7 @@ const LocationList = ({ type, setOpenLocationList }: OwnProps) => {
                 </button>
             </Header>
             <StyledH3>{type === 'origin' ? '출발지가 어디신가요?' : '목적지가 어디신가요?'}</StyledH3>
-            <KakaoMap type={type} />
+            <KakaoMapSearch type={type} />
             <ModalFooter>
                 <SubmitButton onClick={() => { setOpenLocationList({ isOpen: false, type: '' }); }}>확인</SubmitButton>
             </ModalFooter>

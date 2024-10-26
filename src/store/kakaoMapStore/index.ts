@@ -44,8 +44,8 @@ const useKakaoMapStore = create<KakaoMapState>((set) => ({
     setLocation: (location) => set({ location }), 
 
     startEndPoint: {
-        startPoint: { address_name: "", x: "", y: "" },
-        endPoint: { address_name: "", x: "", y: "" },
+        startPoint: { address_name: null, x: null, y: null },
+        endPoint: { address_name: null, x: null, y: null },
     },
 
     setStartEndPoint: (newPoint: any, isOrigin: boolean) => set((state) => ({
