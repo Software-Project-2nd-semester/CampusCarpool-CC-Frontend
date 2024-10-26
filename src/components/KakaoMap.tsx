@@ -1,6 +1,12 @@
 import { useEffect } from "react";
 import useKakaoMapStore from "../store/kakaoMapStore";
 
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+
 const KakaoMap = () => {
   // 현재 위치
   const location = useKakaoMapStore((state) => state.location);
@@ -57,14 +63,13 @@ const KakaoMap = () => {
     });
 
     marker.setMap(map);
-
+    
     container?.addEventListener("touchmove", preventScroll);
 
     return () => {
       container?.removeEventListener("touchmove", preventScroll);
     };
   }, [location]);
-
   return <div id="map" style={{ height: "400px" }}></div>;
 };
 
