@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import useKakaoMapStore from "../store/kakaoMapStore";
 
 declare global {
@@ -11,7 +11,10 @@ const KakaoMap = () => {
   // 현재 위치
   const location = useKakaoMapStore((state) => state.location);
   const setLocation = useKakaoMapStore((state) => state.setLocation);
+  const startEndPoint = useKakaoMapStore((state) => state.startEndPoint);
+
   const setCurrentMap = useKakaoMapStore((state) => state.setCurrentMap);
+  const mapRef = useRef<HTMLDivElement>(null);
 
   // 현재위치 받아오기
   useEffect(() => {
@@ -41,7 +44,8 @@ const KakaoMap = () => {
   };
 
   useEffect(() => {
-    const container = document.getElementById("map");
+    if (!mapRef.current) return;
+
     const options = {
       center: new window.kakao.maps.LatLng(
         location.latitude,
@@ -50,7 +54,7 @@ const KakaoMap = () => {
       level: 3,
       draggable: true,
     };
-    const map = new window.kakao.maps.Map(container, options);
+    const map = new window.kakao.maps.Map(mapRef.current, options);
     setCurrentMap(map);
 
     // 현재 위치 마커
@@ -63,14 +67,11 @@ const KakaoMap = () => {
     });
 
     marker.setMap(map);
-    
-    container?.addEventListener("touchmove", preventScroll);
 
-    return () => {
-      container?.removeEventListener("touchmove", preventScroll);
-    };
+    mapRef.current?.addEventListener("touchmove", preventScroll);
+
   }, [location]);
-  return <div id="map" style={{ height: "400px" }}></div>;
+  return <div ref={mapRef} style={{ height: "400px" }}></div>;
 };
 
 export default KakaoMap;
