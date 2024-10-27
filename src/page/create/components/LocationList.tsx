@@ -39,7 +39,7 @@ const LocationList = ({ type, setOpenLocationList }: OwnProps) => {
   const setStartEndMarker = useKakaoMapStore(
     (state) => state.setStartEndMarker
   );
-  
+
   const [keyWord, setKeyWord] = useState<string>("");
   const [placeList, setPlaceList] = useState<any[]>([]);
 
@@ -87,14 +87,14 @@ const LocationList = ({ type, setOpenLocationList }: OwnProps) => {
     // 지도 중심 이동
     const newCenter = new window.kakao.maps.LatLng(centerY, centerX);
 
-    currentMap.setCenter(newCenter);
+    currentMap.panTo(newCenter);
   };
 
   // 출발지, 도착지 아이콘 생성 및 이동
   useEffect(() => {
     const geocoder = new window.kakao.maps.services.Geocoder(); // Geocoder 객체 생성
 
-    const createMarker = (point: any, isOrigin: boolean) => {
+    const createListMarker = (point: any, isOrigin: boolean) => {
       const markerSrc = isOrigin
         ? "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png"
         : "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png";
@@ -148,7 +148,7 @@ const LocationList = ({ type, setOpenLocationList }: OwnProps) => {
         }
         NewCenter(startEndPoint.startPoint.y, startEndPoint.startPoint.x);
 
-        const newStartMarker = createMarker(startEndPoint.startPoint, true);
+        const newStartMarker = createListMarker(startEndPoint.startPoint, true);
         setStartEndMarker(newStartMarker, true);
       }
     } else {
@@ -159,7 +159,7 @@ const LocationList = ({ type, setOpenLocationList }: OwnProps) => {
         }
         NewCenter(startEndPoint.endPoint.y, startEndPoint.endPoint.x);
 
-        const newEndMarker = createMarker(startEndPoint.endPoint, false);
+        const newEndMarker = createListMarker(startEndPoint.endPoint, false);
         setStartEndMarker(newEndMarker, false);
       }
     }
@@ -187,7 +187,7 @@ const LocationList = ({ type, setOpenLocationList }: OwnProps) => {
         onChange={(e) => setKeyWord(e.target.value)}
         placeholder={type === "origin" ? "출발지 검색" : "도착지 검색"}
       />
-      <button onClick={()=>{SearchPlaces(keyWord)}}>검색하기</button>
+      <button onClick={() => { SearchPlaces(keyWord) }}>검색하기</button>
       <ul>
         {placeList.map((place, idx) => (
           <li

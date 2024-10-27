@@ -56,9 +56,7 @@ const useKakaoMapStore = create<KakaoMapState>((set) => ({
     })),
 
     currentMap : null,
-    setCurrentMap : (newCurrentMap:any) => set(()=>({
-        currentMap : newCurrentMap
-    })),
+    setCurrentMap : (newCurrentMap:any) => set({currentMap : newCurrentMap}),
 
     startEndMarker : {
         startMarker: null,

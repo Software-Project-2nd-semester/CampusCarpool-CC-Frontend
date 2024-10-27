@@ -16,7 +16,7 @@ import useKakaoMapStore from "../../store/kakaoMapStore";
 import GetDirection from "../../api/kakaoMap/GetDirection";
 import KakaoMap from "../../components/KakaoMap";
 
-const SelectButton = styled(Button)<{ $isSelected: boolean }>`
+const SelectButton = styled(Button) <{ $isSelected: boolean }>`
   ${tw`w-1/3 text-base`}
   background-color: ${({ $isSelected }) =>
     $isSelected ? "#4C3EED" : "#D0D0D0"};
@@ -43,7 +43,7 @@ const MtSection = styled.section`
   ${tw`mt-8`};
 `;
 
-const TaxiSection = styled(MtSection)<{ $isSelected: boolean }>`
+const TaxiSection = styled(MtSection) <{ $isSelected: boolean }>`
   ${tw`flex justify-between`}
   color:${({ $isSelected }) => ($isSelected ? "black" : "#A7A7A7")};
 `;
@@ -58,7 +58,7 @@ const CreateForm = () => {
   const currentMap = useKakaoMapStore((state) => state.currentMap);
 
   const [date, setDate] = useState<string>("");
-  const [openDateSettingModal, setOpenDateSettingModal] =useState<boolean>(false);
+  const [openDateSettingModal, setOpenDateSettingModal] = useState<boolean>(false);
   const [maximumPeople, setMaximumPeople] = useState<number>(5);
   const [sameSex, setSameSex] = useState<boolean>(true);
   const [socialCarpoolMode, setSocialCarpoolMode] = useState<boolean>(true);
@@ -72,7 +72,7 @@ const CreateForm = () => {
     type: "",
   });
   const [currentPolyline, setCurrentPolyline] = useState<any>(null);
-  
+
   //길찾기API Get요청
   useEffect(() => {
     const FindDirection = async () => {
@@ -82,22 +82,22 @@ const CreateForm = () => {
 
           if (result) {
             const duration = result.routes[0].summary.duration;
-            const taxiCharge = result.routes[0].summary.fare.taxi;
-            
+            const taxi = result.routes[0].summary.fare.taxi;
+
             DrawLinePath(result);
-            setTaxiCharge(taxiCharge);
+            setTaxiCharge(taxi);
+            MarkerMark();
           }
         }
       } catch (error) {
         // console.error("경로 요청 중 오류 발생:", error);
       }
     };
-
-    if(openLocationList.type===""){
-        FindDirection();
+    if (openLocationList.type === "") {
+      FindDirection();
     }
-  }, [openLocationList.type,startEndPoint]);
-  
+  }, [startEndPoint, currentMap]);
+
   const DrawLinePath = (data: any) => {
     if (currentPolyline) {
       currentPolyline.setMap(null);
@@ -117,7 +117,7 @@ const CreateForm = () => {
         }
       });
     });
-    
+
     const polyline = new window.kakao.maps.Polyline({
       path: linePath,
       strokeWeight: 6,
@@ -125,11 +125,31 @@ const CreateForm = () => {
       strokeOpacity: 0.8,
       strokeStyle: "solid",
     });
-    
+
     setCurrentPolyline(polyline);
     polyline.setMap(currentMap);
   };
-  
+
+  const MarkerMark = () => {
+    const createFormMarker = (position: any, imageSrc: string) => {
+      const markerSize = new window.kakao.maps.Size(50, 45);
+      const markerOption = { offset: new window.kakao.maps.Point(15, 43) };
+      const markerImage = new window.kakao.maps.MarkerImage(imageSrc, markerSize, markerOption);
+
+      return new window.kakao.maps.Marker({
+        map: currentMap,
+        position,
+        image: markerImage,
+      });
+    };
+
+    const originMarkerPosition = new window.kakao.maps.LatLng(startEndPoint.startPoint.y, startEndPoint.startPoint.x);
+    const destinationMarkerPosition = new window.kakao.maps.LatLng(startEndPoint.endPoint.y, startEndPoint.endPoint.x);
+
+    createFormMarker(originMarkerPosition, "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png");
+    createFormMarker(destinationMarkerPosition, "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png");
+  };
+
   const OpenLocationList = (type: string) => {
     setOpenLocationList({
       isOpen: !openLocationList.isOpen,
@@ -146,13 +166,7 @@ const CreateForm = () => {
           setOpenDateSettingModal={setOpenDateSettingModal}
         />
       ) : null}
-      {/* 출발지 도착지 검색 모달 */}
-      {openLocationList.isOpen ? (
-        <LocationList
-          type={openLocationList.type}
-          setOpenLocationList={setOpenLocationList}
-        />
-      ) : null}
+
       <section>
         <StyledH3>출발시간</StyledH3>
         <InputButton
@@ -199,7 +213,7 @@ const CreateForm = () => {
           className="my-3"
           color={
             startEndPoint.startPoint.address_name &&
-            startEndPoint.endPoint.address_name
+              startEndPoint.endPoint.address_name
               ? "black"
               : "#A7A7A7"
           }
@@ -223,7 +237,13 @@ const CreateForm = () => {
         </InputButton>
       </MtSection>
 
-      <KakaoMap/>
+      {/* 출발지 도착지 검색 모달 */}
+      {openLocationList.isOpen ? (
+        <LocationList
+          type={openLocationList.type}
+          setOpenLocationList={setOpenLocationList}
+        />
+      ) : <KakaoMap />}
 
       <MtSection>
         <StyledH3>최대인원</StyledH3>
