@@ -87,6 +87,7 @@ const CreateForm = () => {
             DrawLinePath(result);
             setTaxiCharge(taxi);
             MarkerMark();
+            NewBound();
           }
         }
       } catch (error) {
@@ -149,6 +150,14 @@ const CreateForm = () => {
     createFormMarker(originMarkerPosition, "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png");
     createFormMarker(destinationMarkerPosition, "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png");
   };
+
+  const NewBound = () => {
+    const bounds = new window.kakao.maps.LatLngBounds();
+    bounds.extend(new window.kakao.maps.LatLng(startEndPoint.startPoint.y, startEndPoint.startPoint.x));
+    bounds.extend(new window.kakao.maps.LatLng(startEndPoint.endPoint.y, startEndPoint.endPoint.x));
+
+    currentMap.setBounds(bounds);
+  }
 
   const OpenLocationList = (type: string) => {
     setOpenLocationList({
