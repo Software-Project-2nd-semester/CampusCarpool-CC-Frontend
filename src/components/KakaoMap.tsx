@@ -9,41 +9,31 @@ declare global {
 
 const KakaoMap = () => {
   // 현재 위치
+  const mapRef = useRef<HTMLDivElement>(null);
   const location = useKakaoMapStore((state) => state.location);
   const setLocation = useKakaoMapStore((state) => state.setLocation);
-  const startEndPoint = useKakaoMapStore((state) => state.startEndPoint);
-
   const setCurrentMap = useKakaoMapStore((state) => state.setCurrentMap);
-  const mapRef = useRef<HTMLDivElement>(null);
-
-  // 현재위치 받아오기
+  console.log(("sd"));
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(success, error, {
-        enableHighAccuracy: true,
-        timeout: 5000,
-      });
+    const apiKey = process.env.REACT_APP_KAKAO_MAP_JS_API_KEY;
+    if (window.kakao && window.kakao.maps) {
+      InitializeMap();
+      return;
     }
-  }, []);
+    getGetlocation();
 
-  // 현재위치 받아오기 성공
-  const success = (position: any) => {
-    setLocation({
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
-    });
-  };
+    const script = document.createElement("script");
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false&libraries=services`;
+    script.async = true;
+    script.onload = () => window.kakao.maps.load(InitializeMap);
+    document.body.appendChild(script);
 
-  // 현재위치 받아오기 실패
-  const error = () => {
-    console.log("위치 받기 실패");
-  };
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, [location]);
 
-  const preventScroll = (e: TouchEvent) => {
-    e.preventDefault();
-  };
-
-  useEffect(() => {
+  const InitializeMap = () => {
     if (!mapRef.current) return;
 
     const options = {
@@ -68,9 +58,36 @@ const KakaoMap = () => {
 
     marker.setMap(map);
 
-    mapRef.current?.addEventListener("touchmove", preventScroll);
+    mapRef.current.addEventListener("touchmove", preventScroll);
+  };
 
-  }, [location]);
+  // 현재위치 받아오기
+  const getGetlocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(success, error, {
+        enableHighAccuracy: true,
+        timeout: 5000,
+      });
+    }
+  }
+
+  // 현재위치 받아오기 성공
+  const success = (position: any) => {
+    setLocation({
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+    });
+  };
+
+  // 현재위치 받아오기 실패
+  const error = () => {
+    console.log("위치 받기 실패");
+  };
+
+  const preventScroll = (e: TouchEvent) => {
+    e.preventDefault();
+  };
+
   return <div ref={mapRef} style={{ height: "400px" }}></div>;
 };
 
