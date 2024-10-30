@@ -12,6 +12,7 @@ const Map = lazy(() => import('../page/map/Map'))
 const Signup = lazy(() => import('../page/signup/Signup'))
 const User = lazy(() => import('../page/user/User'));
 const CreateForm = lazy(() => import('../page/create/CreateForm'));
+const UserProfile=lazy(()=>import('../page/user/Profile'))
 
 const router = createBrowserRouter([
   {
@@ -72,6 +73,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <User />
+          </Suspense>
+        ),
+      },
+      {
+        path: "user/profile", // 빈 문자열 대신 "/" 사용
+        element: (
+          <Suspense fallback={<Loading />}>
+            <UserProfile />
           </Suspense>
         ),
       },
