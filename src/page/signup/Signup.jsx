@@ -3,6 +3,8 @@ import { useState } from 'react';
 import Image from '../../assets/signup/image.svg'
 import Success from './components/Success'
 import { useNavigate } from 'react-router-dom';
+//import userStore from '../../store/userStore/user'
+
 const Signup = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate =useNavigate()
@@ -10,7 +12,8 @@ const Signup = () => {
     // 이전 페이지로 이동
     navigate(-1);
   };
-
+  //const { name, nickname, gender, age, bio, setName, setNickname, setGender, setAge, setBio } = userStore();
+  
   const [formData, setFormData] = useState({
     name: "",
     nickname: "",
@@ -18,13 +21,14 @@ const Signup = () => {
     age: "",
     bio: ""
   });
-  
+  //console.log(name)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
+    //setName(value);
   };
 
   const handleGenderClick = (gender) => {
@@ -57,7 +61,7 @@ const Signup = () => {
 
 
   return (
-  
+    
     <div className='signup-wrapper' style={{paddingBottom:'85px'}}>
       {!isSubmitted?
       
@@ -68,7 +72,7 @@ const Signup = () => {
             <div className='text'>회원정보 입력</div>
           </div>
           <div className='container2'>
-            <div className='img'><img src={Image} style={{width:100,height:100}}></img></div>
+            <div className='img'><img src={Image} style={{width:100,height:100}} alt='alt'></img></div>
             <div className='text'>프로필 설정</div>
           </div>
           <div className='container3'>

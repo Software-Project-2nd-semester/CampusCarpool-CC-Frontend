@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Profile from '../../assets/user/profile.svg';
 import Medal from '../../assets/user/medal.svg';
 import Img1 from '../../assets/user/img1.svg';
@@ -21,36 +22,42 @@ const boxes=[
     id:1,
     img:Img1,
     text:'프로필 수정' ,
+    url:"/user/profile"
   },
   {
     id:2,
     img:Img2,
     text: '내가쓴글',
+    url:"/user/2"
   },
   {
     id:3,
     img:Img3,
     text: '내 예약',
+    url:"/user/3"
   },
   {
     id:4,
     img:Img4,
     text: '작성한 후기',
+    url:"/user/4"
   },
   {
     id:5,
     img:Img5,
     text: '받은후기',
+    url:"/user/5"
   },
   {
     id:6,
     img:Img6,
     text:'공지사항' ,
+    url:"/user/6"
   },
 ]
 
 const User = () => {
- 
+  const navigate = useNavigate();
   return (
     <div className='my-wrapper'>
       <div className='con1'>
@@ -80,20 +87,25 @@ const User = () => {
               boxStyle = {
                 borderRight: '1px solid #d4d4d4',
                 borderBottom: '1px solid #d4d4d4',
-                
+                cursor:'pointer'
               };
             } else if (index === 2) {
               boxStyle = {
                 borderBottom: '1px solid #d4d4d4',
+                cursor:'pointer'
               };
             } else if (index === 3 || index === 4) {
               boxStyle = {
                 borderRight: '1px solid #d4d4d4',
+                cursor:'pointer'
               };
-            }
+            }else{
+              boxStyle={
+                cursor:'pointer'
+              }}
 
             return(
-              <div className='box' style={boxStyle}>
+              <div className='box' style={boxStyle} onClick={()=>{navigate(box.url)}}>
                 <img style={{width:'30px',height:'30px'}}src={box.img} alt='alt'></img>
                 <p>{box.text}</p>
               </div>

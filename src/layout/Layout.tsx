@@ -14,7 +14,7 @@ const Layout = () => {
   const showHeaderDefaultPaths = ['/home', '/chat', '/create', '/user', '/map'];
   const showHeaderDefault = showHeaderDefaultPaths.includes(location.pathname);
 
-  const showHeaderBackPaths = ['/create/createForm'];
+  const showHeaderBackPaths = ['/create/createForm','/user/profile'];
   const showHeaderBack = showHeaderBackPaths.includes(location.pathname);
 
 
