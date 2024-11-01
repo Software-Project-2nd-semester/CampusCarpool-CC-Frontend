@@ -38,9 +38,12 @@ const Login = () => {
             <button className='login-btn2'  onClick={handleClick}>
               <img className='login-naver' src={Naver}/>
               네이버로 시작하기</button>
-            <button className='login-btn3'  onClick={handleClick}>
+            <button className='login-btn3' onClick={() => {
+              window.location.href = 'http://ec2-15-164-222-34.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google'; // 전체 URL로 리다이렉트
+            }}>
               <img className='login-google' src={Google}/>
               Google로 시작하기</button>
+           
           </div>
 
         </div>

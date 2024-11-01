@@ -3,7 +3,27 @@ import { useState } from 'react';
 import Image from '../../assets/signup/image.svg'
 import Success from './components/Success'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 //import userStore from '../../store/userStore/user'
+function ageToEnglish(age) {
+  if (age === '20대') {
+    return 'TWENTY';
+  } else if (age === '30대') {
+    return 'THIRTY';
+  } else if (age === '40대') {
+    return 'FORTY';
+  } else if (age === '50대') {
+    return 'FIFTY';
+  } else if (age === '60대') {
+    return 'SIXTY';
+  } else if (age === '70대') {
+    return 'SEVENTY';
+  } else if (age === '80대') {
+    return 'EIGHTY';
+  } else if (age === '90대') {
+    return 'NINETY';
+  }
+}
 
 const Signup = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -12,14 +32,13 @@ const Signup = () => {
     // 이전 페이지로 이동
     navigate(-1);
   };
-  //const { name, nickname, gender, age, bio, setName, setNickname, setGender, setAge, setBio } = userStore();
-  
+  //const { name, nickname, gender, age, intro, setName, setNickname, setGender, setAge, setBio } = userStore();
   const [formData, setFormData] = useState({
     name: "",
     nickname: "",
     gender: "",
     age: "",
-    bio: ""
+    intro: ""
   });
   //console.log(name)
   const handleChange = (e) => {
@@ -39,17 +58,31 @@ const Signup = () => {
   };
 
   const handleAgeClick = (age) => {
+    
+    const strAge=ageToEnglish(age)
     setFormData({
       ...formData,
-      age,
+      age:strAge
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     // form submission logic
     console.log(formData);
-    setIsSubmitted(true);
+    try {
+      const response = await axios.post('http://ec2-15-164-222-34.ap-northeast-2.compute.amazonaws.com:8080/signup', {
+        name: formData.name,
+        nickname: formData.nickname,
+        sex: formData.sex,
+        age: formData.age,
+        intro: formData.intro,
+      });
+      console.log('Response:', response.data);
+      setIsSubmitted(true); // 제출 성공 시 상태 업데이트
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   // 모든 필드가 채워졌는지 확인
@@ -105,12 +138,12 @@ const Signup = () => {
             <div className='text'>성별</div>
             <div className='button-wrapper'>
               <button type='button' 
-                className={formData.gender === "남성" ? "button1" : "button2"}
-                onClick={() => handleGenderClick("남성")}
+                className={formData.gender === true ? "button1" : "button2"}
+                onClick={() => handleGenderClick(true)}
               >남성</button>
               <button type='button' 
-                className={formData.gender === "여성" ? "button1" : "button2"}
-                onClick={() => handleGenderClick("여성")}
+                className={formData.gender === false ? "button1" : "button2"}
+                onClick={() => handleGenderClick(false)}
               >여성</button>
             </div>
           </div>
@@ -118,16 +151,18 @@ const Signup = () => {
           <div className='container6'>
             <div className='text'>나이</div>
             <div className='button-wrapper'>
-              {["20대", "30대", "40대", "50대", "60대", "70대", "80대", "90대"].map((age) => (
+              {["20대", "30대", "40대", "50대", "60대", "70대", "80대", "90대"].map((age) =>{
+                const strAge=ageToEnglish(age)
+                return(
                 <button
                   type="button"
                   // key={age}
-                  className={formData.age === age ? "button1" : "button2"}
+                  className={formData.age === strAge ? "button1" : "button2"}
                   onClick={() => handleAgeClick(age)}
                 >
                   {age}
                 </button>
-              ))}
+              )})}
             </div>
           </div>
 
@@ -136,9 +171,9 @@ const Signup = () => {
             <div className='textarea-wrapper'>
               <textarea
                 className='textarea'
-                name="bio"
+                name="intro"
                 placeholder="한줄 본인소개를 해주세요! (최대 50자)"
-                value={formData.bio}
+                value={formData.intro}
                 onChange={handleChange}
               />
             </div>
