@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import Image from '../../assets/signup/image.svg'
 import Success from './components/Success'
 import { useNavigate } from 'react-router-dom';
@@ -28,6 +28,7 @@ function ageToEnglish(age) {
 const Signup = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate =useNavigate()
+
   const goBack = () => {
     // 이전 페이지로 이동
     navigate(-1);
@@ -38,7 +39,8 @@ const Signup = () => {
     nickname: "",
     gender: "",
     age: "",
-    intro: ""
+    intro: "",
+    sub:""
   });
   //console.log(name)
   const handleChange = (e) => {
@@ -71,12 +73,13 @@ const Signup = () => {
     // form submission logic
     console.log(formData);
     try {
-      const response = await axios.post('http://ec2-15-164-222-34.ap-northeast-2.compute.amazonaws.com:8080/signup', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/signup`, {
         name: formData.name,
         nickname: formData.nickname,
         sex: formData.sex,
         age: formData.age,
         intro: formData.intro,
+        sub:formData.sub
       });
       console.log('Response:', response.data);
       setIsSubmitted(true); // 제출 성공 시 상태 업데이트
@@ -92,7 +95,19 @@ const Signup = () => {
   const buttonClass = isFormValid ? 'button' : 'button-disabled'; // 버튼 스타일 변경
 
 
+ useEffect(() => {
+    // URL의 쿼리 문자열에서 sub 파라미터를 추출
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const subValue = urlParams.get('sub');
 
+    if (subValue) {
+      setFormData({...formData,sub:subValue}); // 상태 업데이트
+      sessionStorage.setItem('sub', subValue);
+    } else {
+      console.log('sub 값이 존재하지 않습니다.');
+    }
+  }, []); // 빈 배열을 두어 컴포넌트 마운트 시 한 번 실행
   return (
     
     <div className='signup-wrapper' style={{paddingBottom:'85px'}}>
