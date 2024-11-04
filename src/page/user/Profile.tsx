@@ -2,45 +2,17 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import ProfileImage from '../../assets/user/profile.svg';
 import { useNavigate } from 'react-router-dom';
-//import userStore from '../../store/userStore/user'
+import user from '../../store/userStore/user';
+
 const genders=['남성','여성']
 const ages=['20대','30대','40대','50대','60대','70대','80대','90대']
 
 const Profile = () => {
-//const { name, nickname, gender, age, bio, setName, setNickname, setGender, setAge, setBio } = userStore();
-//console.log(name)
  const navigate=useNavigate()
+ const { name,nickname,age,gender,intro,setName,setNickname,setAge,setGender,setIntro} = user();
 
- //나중에 GET할때 사용예정
- //const [data, setData] = useState([]);
- //const [loading, setLoading] = useState(true);
- //const [error, setError] = useState('');
+ console.log(name,nickname,age,gender,intro)
  
-//  useEffect(() => {
-//   const fetchData = async () => {
-//     try {
-//       // GET 요청 보내기
-//       const response = await axios.get('');
-//       setData(response.data); // 응답 데이터 설정
-//     } catch (err) {
-//       setError('데이터를 가져오는 데 오류가 발생했습니다.'); // 오류 처리
-//     } finally {
-//       setLoading(false); // 로딩 상태 업데이트
-//     }
-//   };
-
-//   fetchData(); // 데이터 가져오기 함수 호출
-// }, []);
-
-//  if (loading) {
-//   return <p>로딩 중...</p>;
-// }
-
-// if (error) {
-//   return <p>{error}</p>;
-// }
-
-
   return (
     <section>
       <form className='flex flex-col gap-8' onSubmit={()=>{
