@@ -5,7 +5,6 @@ import axios from 'axios';
 const Home = () => {
   const { name,nickname,age,gender,intro,setName,setNickname,setAge,setGender,setIntro} = user();
   
-  
   useEffect(() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -38,7 +37,6 @@ const Home = () => {
   if(name===''){
     fetchData()
   } 
-  
   }, []); 
 
   return (

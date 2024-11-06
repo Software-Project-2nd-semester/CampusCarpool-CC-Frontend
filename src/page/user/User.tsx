@@ -8,6 +8,8 @@ import Img3 from '../../assets/user/img3.svg';
 import Img4 from '../../assets/user/img4.svg';
 import Img5 from '../../assets/user/img5.svg';
 import Img6 from '../../assets/user/img6.svg';
+import userStore from '../../store/userStore/user';
+
 
 const user={
   profile:Profile,
@@ -57,14 +59,16 @@ const boxes=[
 ]
 
 const User = () => {
+ const { nickname,intro} = userStore();
+
   const navigate = useNavigate();
   return (
     <div className='my-wrapper'>
       <div className='con1'>
         <div><img src={user.profile} alt='alt'></img></div>
         <div>
-          <div className='nick'>{user.nickname}</div>
-          <div className='intro'>{user.intro}</div>
+          <div className='nick'>{nickname}</div>
+          <div className='intro'>{intro}</div>
         </div>
       </div>
       <div className='border'></div>
@@ -75,7 +79,7 @@ const User = () => {
             <div style={{display:'flex',fontSize:'12px'}}><img style={{width:'16px',height:'16px'}}src={Medal} alt='alt'/><span>{user.score}점</span></div>
           </div>
           <div className='rank'style={{fontSize:'16px'}}>
-            {user.nickname}님의 매너 티어는 <br></br>{user.rank}입니다
+            {nickname}님의 매너 티어는 <br></br>{user.rank}입니다
           </div>
         </div>
         <div className='box-container'style={{display:'flex'}}>
