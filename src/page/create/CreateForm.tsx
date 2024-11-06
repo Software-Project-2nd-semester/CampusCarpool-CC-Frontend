@@ -97,7 +97,7 @@ const CreateForm = () => {
     if (openLocationList.type === "") {
       FindDirection();
     }
-  }, [startEndPoint, currentMap]);
+  }, [ currentMap]);
 
   const DrawLinePath = (data: any) => {
     if (currentPolyline) {
