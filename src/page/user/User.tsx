@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Profile from '../../assets/user/profile.svg';
 import Medal from '../../assets/user/medal.svg';
@@ -18,6 +18,7 @@ const user={
   score:74,
   rank:'다이아',
 }
+
 
 const boxes=[
   {
@@ -59,11 +60,40 @@ const boxes=[
 ]
 
 const User = () => {
- const { nickname,intro} = userStore();
+const [isModalOpen, setIsModalOpen] = useState(false);
+const { nickname,intro,setName,setNickname,setAge,setGender,setIntro} = userStore();
 
-  const navigate = useNavigate();
+const navigate = useNavigate();
+
+const openModal = () => setIsModalOpen(true);
+const closeModal = () => setIsModalOpen(false);
+
+const handleLogout=()=>{
+  openModal()
+}
+const handleCheck=()=>{
+  navigate('/')
+  sessionStorage.removeItem('sub')
+  setName('')
+  setNickname('')
+  setAge('')
+  setGender('')
+  setIntro('')
+}
+
   return (
-    <div className='my-wrapper'>
+    <div className='my-wrapper relative'>
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-gray-500 opacity-50 z-30"></div>
+      )}
+      {isModalOpen &&<div className='absolute bg-white z-40 w-full top-56 h-40 rounded-2xl'>
+                      <div className='font-bold text-center mt-8'>로그아웃</div>
+                      <div className='text-gray-500 text-center'>정말 로그아웃 할까요?</div>
+                      <div className='flex gap-4 justify-evenly mt-4'>
+                        <button onClick={closeModal} className='bg-gray-300 w-32 h-10 text-white rounded-xl'>취소</button>
+                        <button onClick={handleCheck} className='bg-blue-500 w-32 h-10 text-white rounded-xl'>확인</button>
+                      </div>
+                     </div>}
       <div className='con1'>
         <div><img src={user.profile} alt='alt'></img></div>
         <div>
@@ -71,7 +101,7 @@ const User = () => {
           <div className='intro'>{intro}</div>
         </div>
       </div>
-      <div className='border'></div>
+      <div className='border z-10'></div>
       <div className='con2'>
         <div className='scorebox'>
           <div  className='score'style={{fontSize:'14px'}}>
@@ -117,7 +147,7 @@ const User = () => {
           })}
         </div>
       </div>
-      <div className='border' style={{marginTop:'8px'}}></div>
+      <div className='border z-10' style={{marginTop:'8px'}}></div>
       <div className='con3'>
         <div style={{fontWeight:'bold',fontSize:'12px',color:'#8d8d8d',marginTop:'16px'}}>서비스 안내</div>
         <div className='text-con'>
@@ -132,8 +162,8 @@ const User = () => {
           <div className='text'>알림설정</div>
           <div className='arrow'>{'>'}</div>
         </div>
-        <div className='text-con'>
-          <div className='text'>로그아웃</div>
+        <div className='text-con' onClick={handleLogout} style={{cursor:'pointer'}}>
+          <div className='text' >로그아웃</div>
           <div className='arrow'>{'>'}</div>
         </div>
       </div>
