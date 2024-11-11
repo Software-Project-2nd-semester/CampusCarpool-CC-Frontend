@@ -49,10 +49,7 @@ const DateSettingModal = ({ setDate, setOpenDateSettingModal }: DateProps) => {
         const dateTimeString = `${selectedDate}T${selectedTime}`;
         const dateObject = new Date(dateTimeString);
 
-        const formattedDate = new Intl.DateTimeFormat('ko-KR', options).format(dateObject).replace(/[.\s]+/g, (match) => {
-            if (match === '.') return '';
-            return ' ';
-        }).trim().replace(/(\d{4}) (\d{1,2}) (\d{1,2})/, '$1년 $2월 $3일');
+        const formattedDate = dateObject.toISOString();
 
         setDate(formattedDate);
         setOpenDateSettingModal(false);

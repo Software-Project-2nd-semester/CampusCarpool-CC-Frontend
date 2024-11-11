@@ -28,11 +28,11 @@ const Create = () => {
       <section>
         <StyledH3 className='font-bold text-lg'>카풀</StyledH3>
         <div className='flex gap-x-6'>
-          <Button onClick={() => NavigateCreateForm('driver')}><Driver />운전자</Button>
-          <Button onClick={() => NavigateCreateForm('passenger')}><Passenger />탑승자</Button>
+          <Button onClick={() => NavigateCreateForm('CARPOOL_DRIVER')}><Driver />운전자</Button>
+          <Button onClick={() => NavigateCreateForm('CARPOOL_USER')}><Passenger />탑승자</Button>
         </div>
         <StyledH3 className='font-bold text-lg mt-9'>택시팟</StyledH3>
-        <Button onClick={() => NavigateCreateForm('taxi')}><Taxi />택시</Button>
+        <Button onClick={() => NavigateCreateForm('TAXI')}><Taxi />택시</Button>
       </section>
     </CreatePageWrapper>
   );
