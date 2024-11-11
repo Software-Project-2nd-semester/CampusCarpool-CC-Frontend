@@ -31,7 +31,7 @@ const boxes=[
     id:2,
     img:Img2,
     text: '내가쓴글',
-    url:"/user/2"
+    url:"/user/write/total"
   },
   {
     id:3,
@@ -139,7 +139,7 @@ const handleCheck=()=>{
               }}
 
             return(
-              <div className='box' style={boxStyle} onClick={()=>{navigate(box.url)}}>
+              <div key={index}className='box' style={boxStyle} onClick={()=>{navigate(box.url)}}>
                 <img style={{width:'30px',height:'30px'}}src={box.img} alt='alt'></img>
                 <p>{box.text}</p>
               </div>

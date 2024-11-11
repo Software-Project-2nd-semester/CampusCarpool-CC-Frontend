@@ -13,6 +13,7 @@ const Signup = lazy(() => import('../page/signup/Signup'))
 const User = lazy(() => import('../page/user/User'));
 const CreateForm = lazy(() => import('../page/create/CreateForm'));
 const UserProfile=lazy(()=>import('../page/user/Profile'))
+const Write =lazy(()=>import('../page/user/Write'))
 
 const router = createBrowserRouter([
   {
@@ -81,6 +82,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <UserProfile />
+          </Suspense>
+        ),
+      },
+      {
+        path: "user/write/:tag", 
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Write/>
           </Suspense>
         ),
       },
