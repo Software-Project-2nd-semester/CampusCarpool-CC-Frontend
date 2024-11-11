@@ -150,7 +150,7 @@ const Profile = () => {
             </textarea>
         </div>
         {/* <input type="file" /> */}
-        <div className='w-screen h-16 px-8 py-2 fixed bottom-0 left-0 border-solid border-t-2 border-black'>
+        <div className='w-screen h-16 px-8 py-2 fixed bottom-0 left-0 border-solid border-t-2 border-black bg-white'>
             <button type='submit' className='w-full  h-full inline-block  bg-blue-600 text-white rounded'>저장하기</button>
         </div>
       </form>

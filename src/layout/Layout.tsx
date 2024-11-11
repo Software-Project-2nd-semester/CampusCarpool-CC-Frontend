@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation,matchPath } from 'react-router-dom';
 import Footer from './Footer';
 import Main from './Main';
 import HeaderDefault from './HeaderDefault';
@@ -14,8 +14,13 @@ const Layout = () => {
   const showHeaderDefaultPaths = ['/home', '/chat', '/create', '/user', '/map'];
   const showHeaderDefault = showHeaderDefaultPaths.includes(location.pathname);
 
-  const showHeaderBackPaths = ['/create/createForm','/user/profile'];
-  const showHeaderBack = showHeaderBackPaths.includes(location.pathname);
+  const dynamicPaths = [
+    '/user/write/:tag',
+  ];
+  const isHeaderBackMatch = dynamicPaths.some(path => matchPath(path, location.pathname));
+
+  const showHeaderBackPaths = ['/create/createForm','/user/profile','/user/write/:tag'];
+  const showHeaderBack = showHeaderBackPaths.includes(location.pathname) || isHeaderBackMatch;
 
 
   return (
