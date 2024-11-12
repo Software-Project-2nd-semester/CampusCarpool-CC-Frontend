@@ -4,6 +4,35 @@ import useKakaoMapStore from "../../store/kakaoMapStore";
 import PostPoint from '../../assets/map/PostPoint.svg';
 import GetDirection from "../../api/kakaoMap/GetDirection";
 import styled from "styled-components";
+import GetPost from "../../api/post/GetPost";
+
+interface Post {
+    id: number;
+    sub: string;
+    content: string;
+    departureAt: string;
+    tag: string;
+    departureLat: number;
+    departureLng: number;
+    arriveLat: number;
+    arriveLng: number;
+    sameSex: boolean;
+    socialCarpool: boolean;
+    maximumPeople: number;
+    carInfo: string;
+    expectBill: number;
+    finish: boolean;
+    departurePlaceName: string;
+    arrivePlaceName: string;
+    startPoint: {
+        x: number;
+        y: number;
+    };
+    endPoint: {
+        x: number;
+        y: number;
+    };
+}
 
 const MapPageWrapper = styled.div`
     height: calc(100vh - 160px);
@@ -22,34 +51,41 @@ const Map = () => {
     const [postPolyLine, setPostPolyLine] = useState<any>(null);
     const [postInfo, setPostInfo] = useState<any>(null);
     const [markers, setMarkers] = useState<any[]>([]);
-    const [endMarker,setEndMarker] = useState<any>(null);
+    const [endMarker, setEndMarker] = useState<any>(null);
+    const [postList, setPostList] = useState<any>([]);
 
-    const postList = [
-        {
-            id: 1,
-            startPoint: {address_name: '출발위치1', x: "127.14894257701431", y: "36.833981274461074"},
-            endPoint: {address_name: '도착위치1', x: "127.17832701965428", y: "36.83367680902326"},
-        },
-        {
-            id: 2,
-            startPoint: {address_name: '출발위치2', x: "127.17752805742471", y: "36.83090349722775"},
-            endPoint: {address_name: '도착위치2', x: '127.15468113252068', y: '36.81898672152359'},
-        },
-        {
-            id: 3,
-            startPoint: {address_name: '출발위치3', x: "127.16030154041664", y: "36.826863975586406"},
-            endPoint: {address_name: '도착위치3', x: '127.15691178604727', y: '36.81911896536101'},
-        },
-    ];
+    useEffect(() => {
+        const GetPostList = async () => {
+            try {
+                const result = await GetPost('');
+                const formattedResult = result.map((post: Post) => ({
+                    ...post,
+                    startPoint: {
+                        x: post.departureLng,
+                        y: post.departureLat,
+                    },
+                    endPoint: {
+                        x: post.arriveLng,
+                        y: post.arriveLat,
+                    }
+                }));
+                setPostList(formattedResult);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        GetPostList();
+    }, []);
 
     useEffect(() => {
         if (window.kakao && window.kakao.maps) {
             MarkerMark();
-            NewBound();
+            // NewBound();
         }
-    }, [currentMap, postPolyLine]);
+    }, [currentMap, postPolyLine, postList]);
 
     const FindDirection = async (postStartEndPoint: any) => {
+        console.log(postStartEndPoint)
         try {
             const result = await GetDirection(postStartEndPoint);
             if (result) {
@@ -114,7 +150,7 @@ const Map = () => {
         markers.forEach(marker => marker.setMap(null));
         setMarkers([]);
 
-        postList.forEach(post => {
+        postList.forEach((post: Post) => {
             const startPosition = new window.kakao.maps.LatLng(post.startPoint.y, post.startPoint.x);
             const endPosition = new window.kakao.maps.LatLng(post.endPoint.y, post.endPoint.x);
 
@@ -125,7 +161,7 @@ const Map = () => {
                 setPostInfo(post);
 
                 if (endMarker) endMarker.setMap(null);
-                const endMarker1= createMarker(endPosition, "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png", new window.kakao.maps.Size(45, 35));
+                const endMarker1 = createMarker(endPosition, "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png", new window.kakao.maps.Size(45, 35));
                 setEndMarker(endMarker1);
             });
             setMarkers(prevMarkers => [...prevMarkers, startMarker]);
@@ -140,8 +176,8 @@ const Map = () => {
                 {postInfo && (
                     <>
                         <PostInfoId>게시글 아이디 : {postInfo.id}</PostInfoId>
-                        <PostInfoOrigin>{postInfo.startPoint.address_name}</PostInfoOrigin>
-                        <PostInfoDestination>{postInfo.endPoint.address_name}</PostInfoDestination>
+                        <PostInfoOrigin>{postInfo.departurePlaceName}</PostInfoOrigin>
+                        <PostInfoDestination>{postInfo.arrivePlaceName}</PostInfoDestination>
                     </>
                 )}
             </PostInfoWrapper>
