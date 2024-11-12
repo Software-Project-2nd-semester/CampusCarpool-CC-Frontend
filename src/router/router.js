@@ -14,6 +14,7 @@ const User = lazy(() => import('../page/user/User'));
 const CreateForm = lazy(() => import('../page/create/CreateForm'));
 const UserProfile=lazy(()=>import('../page/user/Profile'))
 const Write =lazy(()=>import('../page/user/Write'))
+const MyPost=lazy(()=>import('../page/user/MyPost'))
 
 const router = createBrowserRouter([
   {
@@ -90,6 +91,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <Write/>
+          </Suspense>
+        ),
+      },
+      {
+        path: "user/post/:id", 
+        element: (
+          <Suspense fallback={<Loading />}>
+            <MyPost/>
           </Suspense>
         ),
       },
