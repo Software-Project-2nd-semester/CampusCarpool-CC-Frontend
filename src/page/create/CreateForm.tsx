@@ -59,6 +59,7 @@ const CreateForm = () => {
     const setStartEndPoint = useKakaoMapStore((state) => state.setStartEndPoint);
     const currentMap = useKakaoMapStore((state) => state.currentMap);
 
+    const [title, setTitle] = useState<string>("");
     const [date, setDate] = useState<string>("");
     const [openDateSettingModal, setOpenDateSettingModal] = useState<boolean>(false);
     const [maximumPeople, setMaximumPeople] = useState<number>(5);
@@ -80,6 +81,7 @@ const CreateForm = () => {
         const postData = {
             sub: sessionStorage.getItem('sub'),
             tag: category,
+            title: title,
             content: content,
             departureAt: date,
             departureLat: startEndPoint.startPoint.y,
@@ -209,6 +211,18 @@ const CreateForm = () => {
             ) : null}
 
             <section>
+                <StyledH3>제목</StyledH3>
+                <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => {
+                        setTitle(e.target.value);
+                    }}
+                    placeholder="이동의 제목을 정해주세요"
+                    className="text-base"
+                />
+            </section>
+            <MtSection>
                 <StyledH3>출발시간</StyledH3>
                 <InputButton
                     onClick={() => {
@@ -225,7 +239,7 @@ const CreateForm = () => {
                     </div>
                     <RightArrow/>
                 </InputButton>
-            </section>
+            </MtSection>
 
             <MtSection>
                 <StyledH3>출발지 / 도착지</StyledH3>
