@@ -16,8 +16,8 @@ const Write : ()=>JSX.Element = () => {
   const { data, error, isLoading } = useQuery({
     queryKey: ['myData1'],
     queryFn:fetchData,
-    staleTime: 60000,  
-    //cacheTime:900000,
+    staleTime: 600000,  
+    gcTime:900000,
   });
 
   if (isLoading) {
@@ -103,11 +103,11 @@ const Write : ()=>JSX.Element = () => {
             tag='택시'
           }
           return(
-            <div key={index}
+            <div key={index} style={{cursor:'pointer'}} onClick={()=>navigate(`/user/post/${d.id}`,{state:{fetch:d,filter:{time:finalFormattedDate}}})}
               className={`rounded p-4 border-2  border-solid bg-gray-200 ${style2}`}
             >
               <div className='flex justify-between'>
-                <p className='font-bold text-lg'>{d.content}</p>
+                <p className='font-bold text-lg'>{d.title}</p>
                 <div className={`w-20 flex justify-evenly rounded-xl ${style}`} >
                   <img src={image} alt='alt' style={{width:'16px'}}></img>
                   <p>{tag}</p>

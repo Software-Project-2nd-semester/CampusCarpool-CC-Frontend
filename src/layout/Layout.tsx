@@ -16,10 +16,11 @@ const Layout = () => {
 
   const dynamicPaths = [
     '/user/write/:tag',
+    '/user/post/:id'
   ];
   const isHeaderBackMatch = dynamicPaths.some(path => matchPath(path, location.pathname));
 
-  const showHeaderBackPaths = ['/create/createForm','/user/profile','/user/write/:tag'];
+  const showHeaderBackPaths = ['/create/createForm','/user/profile'];
   const showHeaderBack = showHeaderBackPaths.includes(location.pathname) || isHeaderBackMatch;
 
 
