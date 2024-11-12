@@ -1,22 +1,53 @@
 import React, { useEffect ,useState} from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Driver from '../../assets/user/tag/driver.svg'
 import User from '../../assets/user/tag/user.svg'
 import Taxi from '../../assets/user/tag/taxi.svg'
 import Depart from '../../assets/user/depart.svg'
 import Arrive from '../../assets/user/arrive.svg'
-import MaximumPeople from '../create/components/MaximumPeople';
 
 const MyPost = () => {
   const location = useLocation();
-  const [data, setData] = useState<any[]>([]);
+  const navigate = useNavigate();
+  const [data, setData] = useState([]);
+  const queryClient = useQueryClient();
   let image;
   let tagKor;
   let style;
   let samesex;
   let socialCarpool;
   console.log(data)
+  
+  const deleteMutation = useMutation(
+   
+    {
+      mutationFn: async () => {
+        await axios.delete(`${process.env.REACT_APP_API_URL}/api/article/${location.state.fetch.id}`, {
+          headers: {
+            sub: sessionStorage.getItem('sub'),
+          },
+        });
+      },
+      onSuccess: () => {
+        alert('삭제되었습니다.');
+        queryClient.invalidateQueries('myData1');
+        navigate('/user/write/total');
+      },
+      onError: () => {
+        alert('삭제에 실패했습니다.');
+      },
+    }
+  );
+  
+
+  const handleDelete = () => {
+    const userConfirmed = window.confirm('정말 삭제하시겠습니까?');
+    if (userConfirmed) {
+      deleteMutation.mutate();
+    }
+  };
 
   useEffect(() => {
     const sendRequest = async () => {
@@ -72,7 +103,7 @@ const MyPost = () => {
     <div className='relative'>
       <div className='flex absolute z-20 -top-12 right-6 gap-2'>
         <button>수정하기</button>
-        <button className='text-red-500'>삭제하기</button>
+        <button onClick={handleDelete} className='text-red-500'>삭제하기</button>
       </div>
       <div className='flex justify-between' >
         <p>{location.state.fetch.title}</p>
