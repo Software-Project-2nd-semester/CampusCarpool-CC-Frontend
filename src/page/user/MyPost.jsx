@@ -7,12 +7,14 @@ import User from '../../assets/user/tag/user.svg'
 import Taxi from '../../assets/user/tag/taxi.svg'
 import Depart from '../../assets/user/depart.svg'
 import Arrive from '../../assets/user/arrive.svg'
+import Reserve from './components/Reserve';
 
 const MyPost = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const queryClient = useQueryClient();
+  const [reserve,setReserve]=useState(false)
   let image;
   let tagKor;
   let style;
@@ -100,6 +102,8 @@ const MyPost = () => {
 
 
   return (
+    <>
+    { !reserve ?(
     <div className='relative'>
       <div className='flex absolute z-20 -top-12 right-6 gap-2'>
         <button>수정하기</button>
@@ -161,7 +165,7 @@ const MyPost = () => {
       
       {location.state.fetch.tag !== 'CARPOOL_USER' &&
       <div className='flex justify-evenly h-20 py-4 w-full fixed bottom-0 left-0 border border-solid border-black '>
-        <button   className='bg-blue-700 px-8 text-white rounded-lg'>예약자</button>
+        <button onClick={()=>setReserve(true)}  className='bg-blue-700 px-8 text-white rounded-lg'>예약자</button>
         <button className='bg-blue-700 px-8 text-white rounded-lg'>채팅방</button>
       </div> 
       }
@@ -171,6 +175,10 @@ const MyPost = () => {
       </div> 
       }
     </div>
+    ):(
+        <Reserve data={data}></Reserve>
+    )}
+    </>
   );
 };
 
