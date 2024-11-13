@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 const Reserve = (prop:any) => {
   const navigate=useNavigate()  
   
-  const handleProfile=()=>{
-    navigate('/')
+  const handleProfile=(sub:string)=>{
+    navigate(`/user/profile/${sub}`,{state:{sub:sub}})
   }
   
   return (
@@ -13,7 +13,7 @@ const Reserve = (prop:any) => {
       {prop.data.map((d:any,index:number)=>{
         return(
           <>
-          <div onClick={handleProfile} className='flex justify-between px-4 py-4'
+          <div onClick={()=>{handleProfile(d.sub)}} className='flex justify-between px-4 py-4'
             style={{cursor:'pointer'}}
           >
             <p>{d.nickname}</p>
