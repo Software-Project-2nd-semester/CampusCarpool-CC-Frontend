@@ -3,10 +3,10 @@ import { createBrowserRouter } from "react-router-dom";
 import Loading from "../components/Loading";
 import Layout from "../layout/Layout";
 
-
 const Chat = lazy(() => import('../page/chat/Chat'));
 const Create = lazy(() => import('../page/create/Create'));
 const Home = lazy(() => import('../page/home/Home'));
+const PostDetail=lazy(()=>import('../page/home/components/PostDetail'));
 const Login = lazy(() => import('../page/login/Login'))
 const Map = lazy(() => import('../page/map/Map'))
 const Signup = lazy(() => import('../page/signup/Signup'))
@@ -47,9 +47,16 @@ const router = createBrowserRouter([
       }, {
         path: "home", // 빈 문자열 대신 "/" 사용
         element: (
-          <Suspense fallback={<Loading />}>
-            <Home />
-          </Suspense>
+            <Suspense fallback={<Loading />}>
+              <Home />
+            </Suspense>
+        ),
+      }, {
+        path: "home/post/:id",
+        element: (
+            <Suspense fallback={<Loading />}>
+              <PostDetail />
+            </Suspense>
         ),
       }, {
         path: "create", // 빈 문자열 대신 "/" 사용
@@ -89,7 +96,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "user/write/:tag", 
+        path: "user/write/:tag",
         element: (
           <Suspense fallback={<Loading />}>
             <Write/>
@@ -97,7 +104,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "user/post/:id", 
+        path: "user/post/:id",
         element: (
           <Suspense fallback={<Loading />}>
             <MyPost/>
@@ -105,7 +112,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "user/profile/:sub", 
+        path: "user/profile/:sub",
         element: (
           <Suspense fallback={<Loading />}>
             <UserProfile/>

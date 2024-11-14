@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from "styled-components";
 import {dateFormat} from "../../../components/dateFormat";
-import {ReactComponent as Origin} from "../../../assets/create/createForm/Origin.svg";
-import {ReactComponent as Destination} from "../../../assets/create/createForm/Destination.svg";
 import Time from "../../../assets/user/time.svg";
+import {useNavigate} from "react-router-dom";
 
 const PostWrapper = styled.li<{ $tag: string }>`
     padding: 0.5rem 1rem;
@@ -28,9 +27,14 @@ const PostWrapper = styled.li<{ $tag: string }>`
 const Post = ({content}: any) => {
     const startDate = dateFormat(content.departureAt);
     const tag = content.tag;
+    const navigate = useNavigate();
+
+    const PostClick = () => {
+        navigate(`/home/post/${content.id}`)
+    };
 
     return (
-        <PostWrapper $tag={tag}>
+        <PostWrapper $tag={tag} onClick={PostClick}>
             <h6 className="text-xl mb-2.5 font-bold">{content.title}</h6>
             <div className="text-gray-500 flex gap-2 mb-1.5">
                 출발지역:
