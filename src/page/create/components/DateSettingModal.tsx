@@ -47,9 +47,9 @@ const DateSettingModal = ({ setDate, setOpenDateSettingModal }: DateProps) => {
 
     const SettingDate = () => {
         const dateTimeString = `${selectedDate}T${selectedTime}`;
-        const dateObject = new Date(dateTimeString);
+        const newDate = new Date(dateTimeString);
 
-        const formattedDate = dateObject.toISOString();
+        const formattedDate = newDate.toISOString();
 
         setDate(formattedDate);
         setOpenDateSettingModal(false);
