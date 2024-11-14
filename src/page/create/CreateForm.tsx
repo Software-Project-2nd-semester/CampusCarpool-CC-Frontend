@@ -17,6 +17,7 @@ import GetDirection from "../../api/kakaoMap/GetDirection";
 import KakaoMap from "../../components/KakaoMap";
 import GetPost from "../../api/post/GetPost";
 import CreatePost from "../../api/post/CreatePost";
+import {dateFormat} from "../../components/dateFormat";
 
 const SelectButton = styled(Button) <{ $isSelected: boolean }>`
     ${tw`w-1/3 text-base`}
@@ -231,7 +232,7 @@ const CreateForm = () => {
                 >
                     <div className="flex gap-x-3">
                         {date ? (
-                            <p className="text-base">{date}</p>
+                            <p className="text-base">{dateFormat(date)}</p>
                         ) : (
                             <GrayBaseP>날짜, 시간을 선택해주세요.</GrayBaseP>
                         )}
