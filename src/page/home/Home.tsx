@@ -4,36 +4,46 @@ import axios from 'axios';
 import styled from "styled-components";
 import {StyledH3} from "../../scss/styled/Common";
 import Post from "./components/Post";
-import GetDirection from "../../api/kakaoMap/GetDirection";
 import GetPost from "../../api/post/GetPost";
+import {ReactComponent as Driver} from '../../assets/create/Driver.svg'
+import {ReactComponent as Passenger} from '../../assets/create/Passenger.svg'
+import {ReactComponent as Taxi} from '../../assets/create/Taxi.svg'
 
 const HomePageWrapper = styled.div``;
 const CategorySection = styled.section`
     display: flex;
     gap: 0.5rem;
 `;
-const CategoryButton = styled.button`
+const CategoryButton = styled.button<{ $isSelected: boolean }>`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
     width: 25%;
     padding: 0.25rem 0.5rem;
     border-radius: 8px;
     font-weight: 600;
-    border: 1px solid black;
+
+    svg {
+        width: 30%;
+        height: auto;
+    }
 `;
 
 const AllCategoryButton = styled(CategoryButton)`
-
+    border: 1px solid black;
 `;
 const DriverCategoryButton = styled(CategoryButton)`
-
+    background-color: ${({$isSelected}) => $isSelected ? "#4C3EED" : "#838CDF"};
 `;
 const PassengerCategoryButton = styled(CategoryButton)`
-
+    background-color: ${({$isSelected}) => $isSelected ? "#01A543" : "#8FE5B2"};
 `;
 const TaxiCategoryButton = styled(CategoryButton)`
-
+    background-color: ${({$isSelected}) => $isSelected ? "#E0CA00" : "#F1E89A"};
 `;
 
-const PostSection = styled.section`
+const PostUl = styled.ul`
     margin-top: 1rem;
 `;
 
@@ -95,22 +105,26 @@ const Home = () => {
             <CategorySection>
                 <AllCategoryButton onClick={() => {
                     setPostCategory('')
-                }}>전체</AllCategoryButton>
+                }} $isSelected={postCategory === ''}>
+                    전체
+                </AllCategoryButton>
                 <DriverCategoryButton onClick={() => {
                     setPostCategory('CARPOOL_DRIVER')
-                }}>운전자</DriverCategoryButton>
+                }} $isSelected={postCategory === 'CARPOOL_DRIVER'}><Driver/> 운전자</DriverCategoryButton>
                 <PassengerCategoryButton onClick={() => {
                     setPostCategory('CARPOOL_USER')
-                }}>탑승자</PassengerCategoryButton>
+                }} $isSelected={postCategory === 'CARPOOL_USER'}><Passenger/> 탑승자</PassengerCategoryButton>
                 <TaxiCategoryButton onClick={() => {
                     setPostCategory('TAXI')
-                }}>택시</TaxiCategoryButton>
+                }} $isSelected={postCategory === 'TAXI'}>
+                    <Taxi/> 택시
+                </TaxiCategoryButton>
             </CategorySection>
-            <PostSection>
+            <PostUl>
                 {postList.map(content =>
                     <Post key={content.id} content={content}/>
                 )}
-            </PostSection>
+            </PostUl>
         </HomePageWrapper>
     );
 };
