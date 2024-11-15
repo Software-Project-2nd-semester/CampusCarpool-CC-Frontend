@@ -16,6 +16,7 @@ const Profile=lazy(()=>import('../page/user/Profile'))
 const Write =lazy(()=>import('../page/user/Write'))
 const MyPost=lazy(()=>import('../page/user/MyPost'))
 const UserProfile=lazy(()=>import('../page/user/UserProfile'))
+const MyReserve=lazy(()=>import('../page/user/MyReserve'))
 
 
 const router = createBrowserRouter([
@@ -116,6 +117,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <UserProfile/>
+          </Suspense>
+        ),
+      },
+      {
+        path: "user/reserve",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <MyReserve/>
           </Suspense>
         ),
       },
