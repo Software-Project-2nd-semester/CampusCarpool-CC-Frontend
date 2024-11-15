@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import GetPostDetail from "../../../api/post/GetPostDetail";
+import GetUser from "../../../api/post/GetUser";
 import {dateFormat} from "../../../components/dateFormat";
 import {ReactComponent as Destination} from "../../../assets/create/createForm/Destination.svg";
 import {ReactComponent as Origin} from "../../../assets/create/createForm/Origin.svg";
@@ -59,23 +60,27 @@ const RequireDiv = styled.div`
 const PostDetail = () => {
     const {id} = useParams();
     const [postDetailData, setPostDetailData] = useState<any>(null);
+    const [postCreateUserInfo, setPostCreateUserInfo] = useState<any>('');
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const GetPostDetailList = async () => {
+        const fetchData = async () => {
             if (id) {
                 try {
-                    const result = await GetPostDetail(id);
-                    setPostDetailData(result);
+                    const postDetailResult = await GetPostDetail(id);
+                    const userResult = await GetUser(postDetailResult.sub);
+                    setPostDetailData(postDetailResult);
+                    setPostCreateUserInfo(userResult);
                     setLoading(false);
-                    console.log(result);
+                    console.log('성공');
                 } catch (error) {
-                    console.log(error);
+                    console.error(error);
                 }
             }
         };
-        GetPostDetailList();
+        fetchData();
     }, []);
+
 
     if (loading) return <div>로딩 중...</div>;
 
@@ -146,7 +151,7 @@ const PostDetail = () => {
             <section>
                 <h5 className='font-bold'>작성자</h5>
                 <div>
-
+                    {postCreateUserInfo.nickname}
                 </div>
             </section>
         </div>
