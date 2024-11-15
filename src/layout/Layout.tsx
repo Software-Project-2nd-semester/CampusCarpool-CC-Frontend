@@ -18,6 +18,7 @@ const Layout = () => {
     '/user/write/:tag',
     '/user/post/:id',
     '/home/post/:id',
+    '/user/profile/:sub'
   ];
   const isHeaderBackMatch = dynamicPaths.some(path => matchPath(path, location.pathname));
 
