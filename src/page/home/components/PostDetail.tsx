@@ -9,9 +9,9 @@ import {ReactComponent as DirectionArrow} from "../../../assets/create/createFor
 import {ReactComponent as Driver} from '../../../assets/create/Driver.svg'
 import {ReactComponent as Passenger} from '../../../assets/create/Passenger.svg'
 import {ReactComponent as Taxi} from '../../../assets/create/Taxi.svg'
-
 import styled from "styled-components";
-import {StyledH3} from "../../../scss/styled/Common";
+import {Button, Footer} from "../../../scss/styled/Common";
+import PostReserve from "../../../api/post/PostReserve";
 
 const TagSpan = styled.span<{ $tag: string }>`
     font-size: 0.75rem;
@@ -56,7 +56,6 @@ const RequireDiv = styled.div`
     color: white;
 `;
 
-
 const PostDetail = () => {
     const {id} = useParams();
     const [postDetailData, setPostDetailData] = useState<any>(null);
@@ -72,7 +71,7 @@ const PostDetail = () => {
                     setPostDetailData(postDetailResult);
                     setPostCreateUserInfo(userResult);
                     setLoading(false);
-                    console.log('성공');
+                    console.log(postDetailResult);
                 } catch (error) {
                     console.error(error);
                 }
@@ -81,6 +80,14 @@ const PostDetail = () => {
         fetchData();
     }, []);
 
+    const ClickPostReserve = async (id: number) => {
+        try {
+            const result = await PostReserve(id);
+            console.log(result);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     if (loading) return <div>로딩 중...</div>;
 
@@ -98,7 +105,7 @@ const PostDetail = () => {
     };
 
     return (
-        <div>
+        <>
             <section>
                 {renderTag()}
             </section>
@@ -133,7 +140,7 @@ const PostDetail = () => {
                         {postDetailData.sameSex ? <RequireDiv>활발하게</RequireDiv> : <RequireDiv>조용히</RequireDiv>}
                     </div>
                 </div>
-                <div className='mb-4'>
+                <div className='mb-4 flex justify-between'>
                     <h5 className='font-bold'>현재인원/최대인원</h5>
                     <span>잔여 ?석 / {postDetailData.maximumPeople}석</span>
                 </div>
@@ -142,6 +149,18 @@ const PostDetail = () => {
                         <h5 className='font-bold'>차량정보</h5>
                         <p>{postDetailData.carInfo}</p>
                     </div>
+                )}
+                {postDetailData.tag === 'TAXI' && (
+                    <>
+                        <div className='mb-4 flex justify-between'>
+                            <h5 className='font-bold'>택시 예상 요금</h5>
+                            <p>{postDetailData.expectBill} 원</p>
+                        </div>
+                        <div className='mb-4 flex justify-between'>
+                            <h5 className='font-bold'>1인당 지불할 예상 금액</h5>
+                            <p>{~~(postDetailData.expectBill / postDetailData.maximumPeople)} 원</p>
+                        </div>
+                    </>
                 )}
             </section>
             <section>
@@ -154,7 +173,13 @@ const PostDetail = () => {
                     {postCreateUserInfo.nickname}
                 </div>
             </section>
-        </div>
+            <Footer className='flex gap-x-3'>
+                <Button onClick={() => {
+                    ClickPostReserve(postDetailData.id)
+                }}>예약하기</Button>
+                <Button>채팅하기</Button>
+            </Footer>
+        </>
     );
 };
 
