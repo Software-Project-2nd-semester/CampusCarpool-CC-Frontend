@@ -22,7 +22,7 @@ const Layout = () => {
   ];
   const isHeaderBackMatch = dynamicPaths.some(path => matchPath(path, location.pathname));
 
-  const showHeaderBackPaths = ['/create/createForm','/user/profile','/home/post'];
+  const showHeaderBackPaths = ['/create/createForm','/user/profile','/home/post','/user/reserve'];
   const showHeaderBack = showHeaderBackPaths.includes(location.pathname) || isHeaderBackMatch;
 
 

@@ -37,7 +37,7 @@ const boxes=[
     id:3,
     img:Img3,
     text: '내 예약',
-    url:"/user/3"
+    url:"/user/reserve"
   },
   {
     id:4,
