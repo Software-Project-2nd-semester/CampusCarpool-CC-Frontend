@@ -16,7 +16,7 @@ const Write : ()=>JSX.Element = () => {
   const { data, error, isLoading } = useQuery({
     queryKey: ['myData1'],
     queryFn:fetchData,
-    staleTime: 600000,  
+    staleTime: 1000,  
     gcTime:900000,
   });
 
