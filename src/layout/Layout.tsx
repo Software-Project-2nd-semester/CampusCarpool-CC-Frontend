@@ -18,7 +18,8 @@ const Layout = () => {
     '/user/write/:tag',
     '/user/post/:id',
     '/home/post/:id',
-    '/user/profile/:sub'
+    '/user/profile/:sub',
+    '/chatroom/:id'
   ];
   const isHeaderBackMatch = dynamicPaths.some(path => matchPath(path, location.pathname));
 
