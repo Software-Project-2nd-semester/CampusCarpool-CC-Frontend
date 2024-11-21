@@ -28,6 +28,8 @@ function ageToEnglish(age) {
 const Signup = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate =useNavigate()
+  const [file, setFile] = useState(null); // 업로드한 파일 상태
+  const [preview, setPreview] = useState(Image); // 이미지 미리보기 URL
 
   const goBack = () => {
     // 이전 페이지로 이동
@@ -68,25 +70,78 @@ const Signup = () => {
     });
   };
 
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+
+    // 이미지 미리보기 URL 생성
+    const previewUrl = URL.createObjectURL(selectedFile);
+    setPreview(previewUrl);
+  };
+
   const handleSubmit = async(e) => {
     e.preventDefault();
-    // form submission logic
-    console.log(formData);
+
+    const addUserRequest = {
+      name: formData.name,
+      nickname:formData.nickname,
+      intro:formData.intro,
+      age: formData.age,
+      sex:formData.gender,
+      sub:sessionStorage.getItem('sub')
+    };
+
+
+    const formData_ = new FormData();
+   
+    formData_.append('profileImg',file)
+    formData_.append(
+      'addUserRequest',
+      new Blob([JSON.stringify(addUserRequest)], { type: 'application/json' })
+    );
+    
+    // for (const [key, value] of formData_.entries()) {
+    //   console.log(`${key}: ${value}`);
+    // }
+
+    formData_.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+    console.log(formData)
+
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/signup`, {
-        name: formData.name,
-        nickname: formData.nickname,
-        sex: formData.sex,
-        age: formData.age,
-        intro: formData.intro,
-        sub:formData.sub
-      });
-      console.log('Response:', response.data);
-      setIsSubmitted(true); // 제출 성공 시 상태 업데이트
-    } catch (error) {
-      console.error('Error submitting form:', error);
-    }
-  };
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/signup`, formData_,{
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            // 'sub':sessionStorage.getItem('sub'),
+          },
+        });
+        console.log('Response:', response.data);
+        setIsSubmitted(true); // 제출 성공 시 상태 업데이트
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        alert('Upload failed!');
+      }
+  }
+  
+
+    // form submission logic
+    // try {
+    //   const response = await axios.post(`${process.env.REACT_APP_API_URL}/signup`, {
+    //     name: formData.name,
+    //     nickname: formData.nickname,
+    //     sex: formData.sex,
+    //     age: formData.age,
+    //     intro: formData.intro,
+    //     sub:formData.sub
+    //   });
+    //   console.log('Response:', response.data);
+    //   setIsSubmitted(true); // 제출 성공 시 상태 업데이트
+    // } catch (error) {
+    //   console.error('Error submitting form:', error);
+    // }
+  
+
 
   // 모든 필드가 채워졌는지 확인
   const isFormValid = Object.values(formData).every(field => field !== "");
@@ -120,8 +175,11 @@ const Signup = () => {
             <div className='text'>회원정보 입력</div>
           </div>
           <div className='container2'>
-            <div className='img'><img src={Image} style={{width:100,height:100}} alt='alt'></img></div>
+            <div className='img'><img src={preview} style={{width:100,height:100}} alt='alt'></img></div>
             <div className='text'>프로필 설정</div>
+            <div className='pl-20'>
+              <input type="file" accept="image/*" onChange={handleFileChange} />
+            </div>
           </div>
           <div className='container3'>
             <div className='text'>이름</div>
