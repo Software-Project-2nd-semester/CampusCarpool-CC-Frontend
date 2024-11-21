@@ -17,7 +17,7 @@ const Write =lazy(()=>import('../page/user/Write'))
 const MyPost=lazy(()=>import('../page/user/MyPost'))
 const UserProfile=lazy(()=>import('../page/user/UserProfile'))
 const MyReserve=lazy(()=>import('../page/user/MyReserve'))
-
+const Chatroom=lazy(()=>import('../page/chat/Chatroom'))
 
 const router = createBrowserRouter([
   {
@@ -125,6 +125,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <MyReserve/>
+          </Suspense>
+        ),
+      },
+      {
+        path: "chatroom/:postid",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Chatroom/>
           </Suspense>
         ),
       },
