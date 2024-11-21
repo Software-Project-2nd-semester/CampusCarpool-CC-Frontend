@@ -1,5 +1,5 @@
 import React, { useEffect ,useState} from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate ,useParams} from 'react-router-dom';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Driver from '../../assets/user/tag/driver.svg'
@@ -12,6 +12,7 @@ import Reserve from './components/Reserve';
 const MyPost = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { id } = useParams();
   const [data, setData] = useState([]);
   const queryClient = useQueryClient();
   const [reserve,setReserve]=useState(false)
@@ -21,6 +22,7 @@ const MyPost = () => {
   let samesex;
   let socialCarpool;
   console.log(data)
+  console.log(id)
   
   const deleteMutation = useMutation(
    
@@ -166,12 +168,20 @@ const MyPost = () => {
       {location.state.fetch.tag !== 'CARPOOL_USER' &&
       <div className='flex justify-evenly h-20 py-4 w-full fixed bottom-0 left-0 border border-solid border-black '>
         <button onClick={()=>setReserve(true)}  className='bg-blue-700 px-8 text-white rounded-lg'>예약자</button>
-        <button className='bg-blue-700 px-8 text-white rounded-lg'>채팅방</button>
+        <button className='bg-blue-700 px-8 text-white rounded-lg'
+         onClick={() => {
+          navigate(`/chatroom/${id}`);
+      }}
+        >채팅방</button>
       </div> 
       }
       {location.state.fetch.tag === 'CARPOOL_USER' &&
       <div className='flex justify-evenly h-20 py-4 w-full fixed bottom-0 left-0 border border-solid border-black '>
-      <button className='w-80 bg-blue-700 px-8 text-white rounded-lg'>채팅방</button>
+      <button className='w-80 bg-blue-700 px-8 text-white rounded-lg'
+        onClick={() => {
+            navigate(`/chatroom/${id}`);
+        }}
+      >채팅방</button>
       </div> 
       }
     </div>

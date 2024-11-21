@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
+import {useParams,useNavigate} from "react-router-dom";
 import GetPostDetail from "../../../api/post/GetPostDetail";
 import GetUser from "../../../api/post/GetUser";
 import {dateFormat} from "../../../components/dateFormat";
@@ -57,6 +57,7 @@ const RequireDiv = styled.div`
 `;
 
 const PostDetail = () => {
+    const navigate=useNavigate()
     const {id} = useParams();
     const [postDetailData, setPostDetailData] = useState<any>(null);
     const [postCreateUserInfo, setPostCreateUserInfo] = useState<any>('');
@@ -177,7 +178,7 @@ const PostDetail = () => {
                 <Button onClick={() => {
                     ClickPostReserve(postDetailData.id)
                 }}>예약하기</Button>
-                <Button>채팅하기</Button>
+                <Button onClick={()=>{navigate(`/chatroom/${postDetailData.id}`)}}>채팅하기</Button>
             </Footer>
         </>
     );
