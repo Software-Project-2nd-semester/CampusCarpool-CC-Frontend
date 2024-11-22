@@ -12,7 +12,8 @@ interface UserProfileData {
   age:string;
   sex:boolean;
   intro:string;
-  id:number
+  id:number;
+  profileImg:string;
 }
 const sexToString=(sex:any)=>{
   if(sex===true){
@@ -46,6 +47,7 @@ function ageToKorean(age: any) {
 const UserProfile = () => {
   const [data,setData]=useState<UserProfileData | null>(null)
   const location = useLocation();
+  let imgurl;
   
   useEffect( ()=>{
     
@@ -70,10 +72,21 @@ const UserProfile = () => {
   }
   console.log(data)
   
+  
+  if(data.profileImg){
+    let url=data.profileImg
+    let processurl = url.replace('/home/ec2-user', '')
+   let  img=`${process.env.REACT_APP_API_URL}${processurl}`;
+    imgurl=img
+  }
 
   return (
     <div>
-      <div className='text-2xl mb-4'>{data.nickname}</div>
+      <div className='flex items-center'>
+        <div className='pt-2 '><img className='rounded-full' src={imgurl} alt='alt' style={{width:'100px'}} ></img></div>
+        <div className='text-4xl mb-4 pt-4 '>{data.nickname}</div>
+
+      </div>
       <div className='flex gap-2 mb-2'>
         <img src={Person1} alt='alt' style={{width:'16px'}}></img>
         <p>{sexToString(data.sex)}•{ageToKorean(data.age)}</p>
