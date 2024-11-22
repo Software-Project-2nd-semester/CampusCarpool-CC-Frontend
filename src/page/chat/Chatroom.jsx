@@ -12,25 +12,27 @@ const Chatroom = () => {
   const client = useRef(null);
   const { postid } = useParams();
   const [id,setId]=useState('')
-
+  const messagesContainerRef = useRef(null); // 메시지 컨테이너 div를 위한 ref
+  // console.log('렌더링')
   //console.log(postid)
   useEffect(()=>{
+    console.log('useEffect[]')
     const fetchData = async () => {
       try {
         let id;
         
         //1.chatid 받아오는 작업
         const response1=await axios.post(`${process.env.REACT_APP_API_URL}/api/chat/room/${postid}`);
-        console.log(response1.data.id)
+        // console.log(response1.data.id)
         id=response1.data.id
         setId(id)
 
         //2.이전 대화글 가져오는 작업
         const response2 = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts/1"
+          `${process.env.REACT_APP_API_URL}/api/chat/room/${id}/messages`
         );
-        console.log(response2.data)
-        setMessages([])
+        // console.log(response2.data)
+        setMessages(response2.data)
 
         //3.websocket연결
         const socket = new WebSocket(`${process.env.REACT_APP_WEBSOCKET_URL}/ws-stomp`);
@@ -60,6 +62,8 @@ const Chatroom = () => {
 
       client.current.activate();
 
+    
+
     } catch (err) {
         console.log('error')
       } 
@@ -74,6 +78,16 @@ const Chatroom = () => {
   };
 
   },[])
+
+// 메시지가 추가된 후에 스크롤을 맨 아래로 이동시키는 useEffect
+useEffect(() => {
+  console.log('useEffect[messages]');
+
+  // 메시지 컨테이너 div의 스크롤을 맨 아래로 이동시킴
+  if (messagesContainerRef.current) {
+    messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+  }
+}, [messages]); // messages가 변경될 때마다 스크롤을 맨 아래로 이동
 
   if(messages===null){
     // console.log('loading')
@@ -102,8 +116,11 @@ const Chatroom = () => {
 };
 
   return (
-    <div className='h-screen'>
-      <div className='w-full h-2/3 flex flex-col ' >
+    <div className='h-screen'
+    >
+      <div className='w-full h-2/3 flex flex-col overflow-y-auto' 
+        ref={messagesContainerRef}
+      >
         {messages.map((msg, index) => {
           const  isMe = (msg.senderSub === sessionStorage.getItem('sub'));
          // console.log(isMe)
