@@ -7,21 +7,21 @@ import axios from 'axios';
 
 const genders=['남성','여성']
 const ages=['20대','30대','40대','50대','60대','70대','80대','90대']
-const genderToString = (gender:any) => {
+const genderToString = (gender) => {
   if (gender === false) {
     return '남성';
   } else if (gender === true) {
     return '여성';
   } 
 };
-const genderToBoolean = (gender:any) => {
+const genderToBoolean = (gender) => {
   if (gender === '남성') {
     return false;
   } else if (gender === '여성') {
     return true;
   }
 };
-function ageToEnglish(age:any) {
+function ageToEnglish(age) {
   if (age === '20대') {
     return 'TWENTY';
   } else if (age === '30대') {
@@ -50,29 +50,46 @@ const Profile = () => {
  const [age_,setAge_]=useState(age)
  const [gender_,setGender_]=useState(gender)
  const [intro_,setIntro_]=useState(intro)
+const [profile,setProfile]=useState(ProfileImage)
+
+const [file, setFile] = useState(null); // 업로드한 파일 상태
+
+
  //console.log(name,nickname,age,gender,intro)
  console.log(name_,nickname_,age_,gender_,intro_)
- const handleClick = async (event:any) => {
+
+ const handleClick = async (event) => {
   event.preventDefault();   
+
+  const addUserRequest = {
+    name: name_,
+    nickname:nickname_,
+    intro:intro_,
+    age: age_,
+    sex:gender_,
+    // sub:sessionStorage.getItem('sub')
+  };
+
+  const formData_ = new FormData();
+  formData_.append('profileImg',file)
+  formData_.append(
+      'addInfoRequest',
+      new Blob([JSON.stringify(addUserRequest)], { type: 'application/json' })
+  );
+
+
   try {
-    const response = await axios.put(
-      `${process.env.REACT_APP_API_URL}/api/user/sub`, // URL에 환경변수 사용
-      {
-        "name": name_,
-        "nickname": nickname_,
-        "age": age_,
-        "intro": intro_
-      }, 
-      {
-        headers: {
-          'sub': sessionStorage.getItem('sub') // sessionStorage에서 'sub' 값을 가져옴
-        }
-      }
-    );
+    const response = await axios.put(`${process.env.REACT_APP_API_URL}/api/user/sub`, formData_,{
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'sub':sessionStorage.getItem('sub'),
+      },
+    });
     setName(name_)
     setNickname(nickname_)
     setAge(age_)
     setIntro(intro_)
+    setGender(gender_)
     navigate('/user');
   } catch (error) {
     console.error('에러 발생:', error);
@@ -80,12 +97,51 @@ const Profile = () => {
 };
 
 
+const handleFileChange = (event) => {
+  const selectedFile = event.target.files[0];
+  setFile(selectedFile);
+
+  
+  const previewUrl = URL.createObjectURL(selectedFile);
+  setProfile(previewUrl)
+};
+
+
+useEffect(() => {
+  // 비동기 함수 정의
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+       `${process.env.REACT_APP_API_URL}/api/user/sub`,{
+        params:{
+          sub:sessionStorage.getItem('sub')
+        }
+       },
+      );
+      console.log(response.data)
+      const processUrl = response.data.profileImg.replace('/home/ec2-user', '')
+      console.log(processUrl)
+      const profileImageUrl = `${process.env.REACT_APP_API_URL}${processUrl}`;
+      console.log(profileImageUrl)
+      setProfile(profileImageUrl); 
+    } catch (err) {
+      console.error('Error fetching');
+    }
+  };
+
+  fetchData(); // 비동기 함수 호출
+}, []); // 빈 배열로 한 번만 실행되도록 설정
+
+
+
  return (
     <section>
       <form className='flex flex-col gap-8' onSubmit={handleClick}>
         <div>
-          <img style={{width:'100px',height:'100px',margin:'0 auto'}}src={ProfileImage} alt='alt'></img>
+          <img style={{width:'100px',height:'100px',margin:'0 auto'}}src={profile} alt='alt' className='rounded-full'></img>
           <p className='text-center font-bold'>프로필 설정</p>
+          <div className='text-center pl-20'><input type="file" accept="image/*" onChange={handleFileChange} /></div>
+
         </div>
         <div>
           <p>이름</p>

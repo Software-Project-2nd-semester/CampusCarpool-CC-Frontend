@@ -121,7 +121,7 @@ useEffect(() => {
                       </div>
                      </div>}
       <div className='con1'>
-        <div><img src={profile} alt='alt'></img></div>
+        <div><img className='rounded-full' src={profile} alt='alt'></img></div>
         <div>
           <div className='nick'>{nickname}</div>
           <div className='intro'>{intro}</div>
