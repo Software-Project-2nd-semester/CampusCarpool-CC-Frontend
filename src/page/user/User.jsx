@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Profile from '../../assets/user/profile.svg';
 import Medal from '../../assets/user/medal.svg';
 import Img1 from '../../assets/user/img1.svg';
@@ -62,7 +63,7 @@ const boxes=[
 const User = () => {
 const [isModalOpen, setIsModalOpen] = useState(false);
 const { nickname,intro,setName,setNickname,setAge,setGender,setIntro} = userStore();
-
+const [profile,setProfile]=useState(Profile)
 const navigate = useNavigate();
 
 const openModal = () => setIsModalOpen(true);
@@ -81,6 +82,31 @@ const handleCheck=()=>{
   setIntro('')
 }
 
+useEffect(() => {
+  // 비동기 함수 정의
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+       `${process.env.REACT_APP_API_URL}/api/user/sub`,{
+        params:{
+          sub:sessionStorage.getItem('sub')
+        }
+       },
+      );
+      console.log(response.data)
+      const processUrl = response.data.profileImg.replace('/home/ec2-user', '')
+      console.log(processUrl)
+      const profileImageUrl = `${process.env.REACT_APP_API_URL}${processUrl}`;
+      console.log(profileImageUrl)
+      setProfile(profileImageUrl); 
+    } catch (err) {
+      console.error('Error fetching');
+    }
+  };
+
+  fetchData(); // 비동기 함수 호출
+}, []); // 빈 배열로 한 번만 실행되도록 설정
+
   return (
     <div className='my-wrapper relative'>
       {isModalOpen && (
@@ -95,7 +121,7 @@ const handleCheck=()=>{
                       </div>
                      </div>}
       <div className='con1'>
-        <div><img src={user.profile} alt='alt'></img></div>
+        <div><img src={profile} alt='alt'></img></div>
         <div>
           <div className='nick'>{nickname}</div>
           <div className='intro'>{intro}</div>
