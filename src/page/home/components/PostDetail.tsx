@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams,useNavigate} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import GetPostDetail from "../../../api/post/GetPostDetail";
 import GetUser from "../../../api/post/GetUser";
 import {dateFormat} from "../../../components/dateFormat";
@@ -12,6 +12,10 @@ import {ReactComponent as Taxi} from '../../../assets/create/Taxi.svg'
 import styled from "styled-components";
 import {Button, Footer} from "../../../scss/styled/Common";
 import PostReserve from "../../../api/post/PostReserve";
+import GetPostReservation from "../../../api/post/GetPostReservation";
+import KakaoMap from "../../../components/KakaoMap";
+import useKakaoMapStore from "../../../store/kakaoMapStore";
+import GetDirection from "../../../api/kakaoMap/GetDirection";
 
 const TagSpan = styled.span<{ $tag: string }>`
     font-size: 0.75rem;
@@ -56,11 +60,20 @@ const RequireDiv = styled.div`
     color: white;
 `;
 
+const StyledButton = styled(Button)<{ disabled: boolean }>`
+    background-color: ${({disabled}) => (disabled ? '#ccc' : '#4C3EED')};
+    cursor: ${({disabled}) => (disabled ? 'not-allowed' : 'pointer')};
+`;
+
 const PostDetail = () => {
-    const navigate=useNavigate()
+    const currentMap = useKakaoMapStore((state) => state.currentMap);
+    const [postPolyLine, setPostPolyLine] = useState<any>(null);
+
+    const navigate = useNavigate()
     const {id} = useParams();
     const [postDetailData, setPostDetailData] = useState<any>(null);
     const [postCreateUserInfo, setPostCreateUserInfo] = useState<any>('');
+    const [reservePeople, setReservePeople] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
@@ -68,10 +81,12 @@ const PostDetail = () => {
             if (id) {
                 try {
                     const postDetailResult = await GetPostDetail(id);
+                    const postReservation = await GetPostReservation(id);
                     const userResult = await GetUser(postDetailResult.sub);
                     setPostDetailData(postDetailResult);
                     setPostCreateUserInfo(userResult);
                     setLoading(false);
+                    setReservePeople(postReservation);
                     console.log(postDetailResult);
                 } catch (error) {
                     console.error(error);
@@ -85,12 +100,101 @@ const PostDetail = () => {
         try {
             const result = await PostReserve(id);
             console.log(result);
+            window.location.reload();
         } catch (error) {
             console.log(error);
         }
     }
 
-    if (loading) return <div>로딩 중...</div>;
+    useEffect(() => {
+        if (postDetailData && window.kakao) {
+            MarkerMark();
+            NewBound();
+            FindDirection();
+            currentMap.setDraggable(false);
+        }
+    }, [currentMap]);
+
+    const MarkerMark = () => {
+        const createFormMarker = (position: any, imageSrc: string) => {
+            const markerSize = new window.kakao.maps.Size(50, 45);
+            const markerOption = {offset: new window.kakao.maps.Point(15, 43)};
+            const markerImage = new window.kakao.maps.MarkerImage(imageSrc, markerSize, markerOption);
+
+            return new window.kakao.maps.Marker({
+                map: currentMap,
+                position,
+                image: markerImage,
+            });
+        };
+
+        const originMarkerPosition = new window.kakao.maps.LatLng(postDetailData.departureLat, postDetailData.departureLng);
+        const destinationMarkerPosition = new window.kakao.maps.LatLng(postDetailData.arriveLat, postDetailData.arriveLng);
+
+        createFormMarker(originMarkerPosition, "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png");
+        createFormMarker(destinationMarkerPosition, "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png");
+    };
+
+    const FindDirection = async () => {
+        const startEndPoint = {
+            startPoint: {
+                x: postDetailData.departureLng,
+                y: postDetailData.departureLat,
+            },
+            endPoint: {
+                x: postDetailData.arriveLng,
+                y: postDetailData.arriveLat,
+            },
+        };
+        try {
+            const result = await GetDirection(startEndPoint);
+            if (result) {
+                DrawLinePath(result);
+            }
+        } catch (error) {
+            // console.error("경로 요청 중 오류 발생:", error);
+        }
+    };
+
+    const DrawLinePath = (data: any) => {
+        if (postPolyLine) {
+            postPolyLine.setMap(null);
+        }
+
+        const postLinePath: any[] = [];
+
+        data.routes[0].sections[0].roads.forEach((router: any) => {
+            router.vertexes.forEach((vertex: number, index: number) => {
+                if (index % 2 === 0) {
+                    postLinePath.push(
+                        new window.kakao.maps.LatLng(
+                            router.vertexes[index + 1],
+                            router.vertexes[index]
+                        )
+                    );
+                }
+            });
+        });
+
+        const polyline = new window.kakao.maps.Polyline({
+            path: postLinePath,
+            strokeWeight: 6,
+            strokeColor: "#4C3EED",
+            strokeOpacity: 1,
+            strokeStyle: "solid",
+        });
+
+        setPostPolyLine(polyline);
+        polyline.setMap(currentMap);
+    };
+
+    const NewBound = () => {
+        const bounds = new window.kakao.maps.LatLngBounds();
+        bounds.extend(new window.kakao.maps.LatLng(postDetailData.departureLat, postDetailData.departureLng));
+        bounds.extend(new window.kakao.maps.LatLng(postDetailData.arriveLat, postDetailData.arriveLng));
+
+        currentMap.setBounds(bounds);
+    };
 
     const renderTag = () => {
         switch (postDetailData?.tag) {
@@ -104,6 +208,18 @@ const PostDetail = () => {
                 return null;
         }
     };
+
+    const isCreatePeople = () => {
+        const userSub = sessionStorage.getItem('sub');
+        return postDetailData.sub === userSub;
+    };
+
+    const isUserReserved = () => {
+        const userSub = sessionStorage.getItem('sub');
+        return reservePeople?.some((person: any) => person.sub === userSub);
+    };
+
+    if (loading) return <div>로딩 중...</div>;
 
     return (
         <>
@@ -143,7 +259,7 @@ const PostDetail = () => {
                 </div>
                 <div className='mb-4 flex justify-between'>
                     <h5 className='font-bold'>현재인원/최대인원</h5>
-                    <span>잔여 ?석 / {postDetailData.maximumPeople}석</span>
+                    <span> {reservePeople.length}석 / {postDetailData.maximumPeople}석</span>
                 </div>
                 {postDetailData.tag === 'CARPOOL_DRIVER' && (
                     <div className='mb-4'>
@@ -165,7 +281,7 @@ const PostDetail = () => {
                 )}
             </section>
             <section>
-                지도 (나중에 추가)
+                <KakaoMap/>
             </section>
             <MyHr/>
             <section>
@@ -175,10 +291,15 @@ const PostDetail = () => {
                 </div>
             </section>
             <Footer className='flex gap-x-3'>
+                {!isCreatePeople() && (
+                    <StyledButton onClick={() => {
+                        ClickPostReserve(postDetailData.id)
+                    }} disabled={isUserReserved()}
+                    >{isUserReserved() ? '예약 완료' : '예약하기'}</StyledButton>
+                )}
                 <Button onClick={() => {
-                    ClickPostReserve(postDetailData.id)
-                }}>예약하기</Button>
-                <Button onClick={()=>{navigate(`/chatroom/${postDetailData.id}`)}}>채팅하기</Button>
+                    navigate(`/chatroom/${postDetailData.id}`)
+                }}>채팅하기</Button>
             </Footer>
         </>
     );
