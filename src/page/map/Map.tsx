@@ -6,6 +6,9 @@ import GetDirection from "../../api/kakaoMap/GetDirection";
 import styled from "styled-components";
 import GetPost from "../../api/post/GetPost";
 import {getDistanceFromLatLonInKm} from "./components/calculateDistance";
+import Time from "../../assets/user/time.svg";
+import {useNavigate} from "react-router-dom";
+import {dateFormat} from "../../components/dateFormat";
 
 interface Post {
     id: number;
@@ -39,15 +42,8 @@ const MapPageWrapper = styled.div`
     height: calc(100vh - 160px);
 `;
 
-const PostInfoWrapper = styled.div`
-
-`;
-
-const PostInfoId = styled.div``;
-const PostInfoOrigin = styled.div``;
-const PostInfoDestination = styled.div``;
-
 const Map = () => {
+    const navigate = useNavigate();
     const currentMap = useKakaoMapStore((state) => state.currentMap);
     const location = useKakaoMapStore((state) => state.location);
 
@@ -56,6 +52,7 @@ const Map = () => {
     const [markers, setMarkers] = useState<any[]>([]);
     const [endMarker, setEndMarker] = useState<any>(null);
     const [postList, setPostList] = useState<any>([]);
+
     console.log(postList);
 
     useEffect(() => {
@@ -86,7 +83,7 @@ const Map = () => {
             MarkerMark();
             NewBound();
         }
-    }, [currentMap, postPolyLine]);
+    }, [currentMap, postPolyLine, postList]);
 
     const FindDirection = async (postStartEndPoint: any) => {
         console.log(postStartEndPoint)
@@ -145,7 +142,7 @@ const Map = () => {
             if (distance <= 1) {
                 bounds.extend(new window.kakao.maps.LatLng(post.startPoint.y, post.startPoint.x));
 
-                if (postInfo?.id === post?.id){
+                if (postInfo?.id === post?.id) {
                     bounds.extend(new window.kakao.maps.LatLng(post.endPoint.y, post.endPoint.x));
                 }
             }
@@ -195,21 +192,56 @@ const Map = () => {
         });
     };
 
+    const PostClick = () => {
+        navigate(`/home/post/${postInfo.id}`)
+    };
+
     return (
         <MapPageWrapper>
             <h1 className='text-2xl text-center mb-2'>근처 카풀 위치를 찾아보세요!</h1>
             <KakaoMap/>
-            <PostInfoWrapper>
-                {postInfo && (
-                    <>
-                        <PostInfoId>게시글 아이디 : {postInfo.id}</PostInfoId>
-                        <PostInfoOrigin>{postInfo.departurePlaceName}</PostInfoOrigin>
-                        <PostInfoDestination>{postInfo.arrivePlaceName}</PostInfoDestination>
-                    </>
-                )}
-            </PostInfoWrapper>
+            {postInfo && (
+                <>
+                    <PostWrapper $tag={postInfo.tag} onClick={PostClick}>
+                        <h6 className="text-xl mb-2.5 font-bold">{postInfo.title}</h6>
+                        <div className="text-gray-500 flex gap-2 mb-1.5">
+                            출발지역:
+                            <span>{postInfo.departurePlaceName}</span>
+                        </div>
+                        <div className="text-gray-500 flex gap-2 mb-1.5">
+                            도착지역:
+                            <span>{postInfo.arrivePlaceName}</span>
+                        </div>
+                        <div className="text-gray-500 gap-2 flex">
+                            <img style={{width: '24px'}} src={Time} alt='alt'></img>
+                            <span>{dateFormat(postInfo.departureAt)}</span>
+                        </div>
+                    </PostWrapper>
+                </>
+            )}
+
         </MapPageWrapper>
     );
 };
 
 export default Map;
+
+const PostWrapper = styled.div<{ $tag: string }>`
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    border: ${({$tag}) => {
+        switch ($tag) {
+            case '':
+                return '2px solid black';
+            case 'CARPOOL_DRIVER':
+                return '2px solid #4C3EED';
+            case 'CARPOOL_USER':
+                return '2px solid #01A543';
+            case 'TAXI':
+                return '2px solid #E0CA00';
+        }
+    }};
+`;
