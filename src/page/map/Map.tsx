@@ -50,7 +50,7 @@ const PostInfoDestination = styled.div``;
 const Map = () => {
     const currentMap = useKakaoMapStore((state) => state.currentMap);
     const location = useKakaoMapStore((state) => state.location);
-    // latitude, longitude
+
     const [postPolyLine, setPostPolyLine] = useState<any>(null);
     const [postInfo, setPostInfo] = useState<any>(null);
     const [markers, setMarkers] = useState<any[]>([]);
@@ -84,9 +84,9 @@ const Map = () => {
     useEffect(() => {
         if (window.kakao && window.kakao.maps) {
             MarkerMark();
-            // NewBound();
+            NewBound();
         }
-    }, [currentMap, postPolyLine, postList]);
+    }, [currentMap, postPolyLine]);
 
     const FindDirection = async (postStartEndPoint: any) => {
         console.log(postStartEndPoint)
@@ -134,9 +134,22 @@ const Map = () => {
 
     const NewBound = () => {
         const bounds = new window.kakao.maps.LatLngBounds();
-        for (let i = 0; i < postList.length; i++) {
-            bounds.extend(new window.kakao.maps.LatLng(postList[i].startPoint.y, postList[i].startPoint.x));
-        }
+        postList.forEach((post: Post) => {
+            const distance = getDistanceFromLatLonInKm(
+                location.latitude,
+                location.longitude,
+                post.startPoint.y,
+                post.startPoint.x,
+            );
+
+            if (distance <= 1) {
+                bounds.extend(new window.kakao.maps.LatLng(post.startPoint.y, post.startPoint.x));
+
+                if (postInfo?.id === post?.id){
+                    bounds.extend(new window.kakao.maps.LatLng(post.endPoint.y, post.endPoint.x));
+                }
+            }
+        });
         currentMap.setBounds(bounds);
     };
 
