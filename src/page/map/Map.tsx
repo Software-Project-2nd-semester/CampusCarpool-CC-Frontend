@@ -5,6 +5,7 @@ import PostPoint from '../../assets/map/PostPoint.svg';
 import GetDirection from "../../api/kakaoMap/GetDirection";
 import styled from "styled-components";
 import GetPost from "../../api/post/GetPost";
+import {getDistanceFromLatLonInKm} from "./components/calculateDistance";
 
 interface Post {
     id: number;
@@ -48,11 +49,14 @@ const PostInfoDestination = styled.div``;
 
 const Map = () => {
     const currentMap = useKakaoMapStore((state) => state.currentMap);
+    const location = useKakaoMapStore((state) => state.location);
+    // latitude, longitude
     const [postPolyLine, setPostPolyLine] = useState<any>(null);
     const [postInfo, setPostInfo] = useState<any>(null);
     const [markers, setMarkers] = useState<any[]>([]);
     const [endMarker, setEndMarker] = useState<any>(null);
     const [postList, setPostList] = useState<any>([]);
+    console.log(postList);
 
     useEffect(() => {
         const GetPostList = async () => {
@@ -151,20 +155,30 @@ const Map = () => {
         setMarkers([]);
 
         postList.forEach((post: Post) => {
-            const startPosition = new window.kakao.maps.LatLng(post.startPoint.y, post.startPoint.x);
-            const endPosition = new window.kakao.maps.LatLng(post.endPoint.y, post.endPoint.x);
+            const distance = getDistanceFromLatLonInKm(
+                location.latitude,
+                location.longitude,
+                post.startPoint.y,
+                post.startPoint.x,
+            );
 
-            const startMarker = createMarker(startPosition, PostPoint, new window.kakao.maps.Size(45, 35));
+            if (distance <= 1) {
+                const startPosition = new window.kakao.maps.LatLng(post.startPoint.y, post.startPoint.x);
+                const endPosition = new window.kakao.maps.LatLng(post.endPoint.y, post.endPoint.x);
 
-            window.kakao.maps.event.addListener(startMarker, 'click', function () {
-                FindDirection(post);
-                setPostInfo(post);
+                const startMarker = createMarker(startPosition, PostPoint, new window.kakao.maps.Size(45, 35));
 
-                if (endMarker) endMarker.setMap(null);
-                const endMarker1 = createMarker(endPosition, "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png", new window.kakao.maps.Size(45, 35));
-                setEndMarker(endMarker1);
-            });
-            setMarkers(prevMarkers => [...prevMarkers, startMarker]);
+                window.kakao.maps.event.addListener(startMarker, 'click', function () {
+                    FindDirection(post);
+                    setPostInfo(post);
+
+                    if (endMarker) endMarker.setMap(null);
+                    const endMarker1 = createMarker(endPosition, "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png", new window.kakao.maps.Size(45, 35));
+                    setEndMarker(endMarker1);
+                });
+                setMarkers(prevMarkers => [...prevMarkers, startMarker]);
+            }
+
         });
     };
 
