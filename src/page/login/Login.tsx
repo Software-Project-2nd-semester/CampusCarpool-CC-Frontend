@@ -32,12 +32,7 @@ const Login = () => {
           <img className='login-logo' src={Logo} alt=''/>
           <p className='login-text'>CC에 오신 것을 환영합니다!</p>
           <div className='login-buttons'>
-            <button className='login-btn1' onClick={handleClick}>
-              <img className='login-kakao'src={Kakao}/>
-              카카오톡으로 시작하기</button>
-            <button className='login-btn2'  onClick={handleClick}>
-              <img className='login-naver' src={Naver}/>
-              네이버로 시작하기</button>
+            
             <button className='login-btn3' onClick={() => {
               window.location.href = `${process.env.REACT_APP_API_URL}/oauth2/authorization/google`;
 

@@ -165,15 +165,15 @@ const Signup = () => {
   }, []); // 빈 배열을 두어 컴포넌트 마운트 시 한 번 실행
   return (
     
-    <div className='signup-wrapper' style={{paddingBottom:'85px'}}>
+    <div className='signup-wrapper' style={{paddingBottom:'85px',paddingTop:0}}>
       {!isSubmitted?
       
       (<form onSubmit={handleSubmit}>
         <div className='signup-container'>
-          <div className='container1'>
+          {/* <div className='container1'>
             <div onClick={goBack}className='arrow'>{'<'}</div>
             <div className='text'>회원정보 입력</div>
-          </div>
+          </div> */}
           <div className='container2'>
             <div className='img'><img src={preview} style={{width:100,height:100}} alt='alt'></img></div>
             <div className='text'>프로필 설정</div>

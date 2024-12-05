@@ -1,5 +1,9 @@
 export const dateFormat = (date: string) => {
     const newDate = new Date(date);
+
+    // 9시간 추가
+    newDate.setHours(newDate.getHours() + 9);
+
     const options: Intl.DateTimeFormatOptions = {
         year: 'numeric',
         month: 'long',
