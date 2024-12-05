@@ -132,7 +132,7 @@ useEffect(() => {
         <div className='scorebox'>
           <div  className='score'style={{fontSize:'14px'}}>
             <div>매너점수</div>
-            <div style={{display:'flex',fontSize:'12px'}}><img style={{width:'16px',height:'16px'}}src={Medal} alt='alt'/><span>{user.score}점</span></div>
+            <div style={{display:'flex',fontSize:'12px'}}><img style={{width:'16px',height:'16px'}}src={Medal} alt='alt'/><span>50점</span></div>
           </div>
           <div className='rank'style={{fontSize:'16px'}}>
             {nickname}님의 매너 티어는 <br></br>{user.rank}입니다
@@ -176,18 +176,7 @@ useEffect(() => {
       <div className='border z-10' style={{marginTop:'8px'}}></div>
       <div className='con3'>
         <div style={{fontWeight:'bold',fontSize:'12px',color:'#8d8d8d',marginTop:'16px'}}>서비스 안내</div>
-        <div className='text-con'>
-          <div className='text'>자주 묻는 질문</div>
-          <div className='arrow'>{'>'}</div>
-        </div>
-        <div className='text-con'>
-          <div className='text'>서비스 이용약관</div>
-          <div className='arrow'>{'>'}</div>
-        </div>
-        <div className='text-con'>
-          <div className='text'>알림설정</div>
-          <div className='arrow'>{'>'}</div>
-        </div>
+        
         <div className='text-con' onClick={handleLogout} style={{cursor:'pointer'}}>
           <div className='text' >로그아웃</div>
           <div className='arrow'>{'>'}</div>

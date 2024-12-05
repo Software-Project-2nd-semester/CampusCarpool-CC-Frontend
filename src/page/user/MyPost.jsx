@@ -106,7 +106,7 @@ const MyPost = () => {
   return (
     <>
     { !reserve ?(
-    <div className='relative'>
+    <div className='relative ' style={{ height: 'calc(100vh - 80px)' }}>
       <div className='flex absolute z-20 -top-12 right-6 gap-2'>
         <button>수정하기</button>
         <button onClick={handleDelete} className='text-red-500'>삭제하기</button>
@@ -166,9 +166,9 @@ const MyPost = () => {
       </div>
       
       {location.state.fetch.tag !== 'CARPOOL_USER' &&
-      <div className='flex justify-evenly h-20 py-4 w-full fixed bottom-0 left-0 border border-solid border-black '>
-        <button onClick={()=>setReserve(true)}  className='bg-blue-700 px-8 text-white rounded-lg'>예약자</button>
-        <button className='bg-blue-700 px-8 text-white rounded-lg'
+      <div className='flex justify-evenly h-20 py-4 w-full absolute bottom-0 left-0  '>
+        <button onClick={()=>setReserve(true)}  className='bg-blue-700 px-16 text-white rounded-lg'>예약자</button>
+        <button className='bg-blue-700 px-16 text-white rounded-lg'
          onClick={() => {
           navigate(`/chatroom/${id}`);
       }}
@@ -176,7 +176,7 @@ const MyPost = () => {
       </div> 
       }
       {location.state.fetch.tag === 'CARPOOL_USER' &&
-      <div className='flex justify-evenly h-20 py-4 w-full fixed bottom-0 left-0 border border-solid border-black '>
+      <div className='flex justify-evenly h-20 py-4 w-full absolute  bottom-0 left-0  '>
       <button className='w-80 bg-blue-700 px-8 text-white rounded-lg'
         onClick={() => {
             navigate(`/chatroom/${id}`);

@@ -71,11 +71,34 @@ const [file, setFile] = useState(null); // 업로드한 파일 상태
   };
 
   const formData_ = new FormData();
-  formData_.append('profileImg',file)
-  formData_.append(
+  
+
+  if (file) {
+    // 파일이 존재하면 추가
+    formData_.append('profileImg', file);
+    formData_.append(
       'addInfoRequest',
       new Blob([JSON.stringify(addUserRequest)], { type: 'application/json' })
   );
+  } else {
+    try {
+      // 파일이 null이면 이미지 URL을 파일로 변환하여 추가
+      const url=profile
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const file = new File([blob], 'filename.extension', { type: blob.type });
+      formData_.append('profileImg', file);
+      formData_.append(
+          'addInfoRequest',
+          new Blob([JSON.stringify(addUserRequest)], { type: 'application/json' })
+      );
+    
+    } catch (error) {
+      console.error('Error converting image URL to file:', error);
+      return; // 에러 발생 시 중단
+    }
+  }
+
 
 
   try {
@@ -206,9 +229,11 @@ useEffect(() => {
             </textarea>
         </div>
         {/* <input type="file" /> */}
-        <div className='w-screen h-16 px-8 py-2 fixed bottom-0 left-0 border-solid border-t-2 border-black bg-white'>
+        {/* <div className='w-screen h-16 px-8 py-2 fixed bottom-0 left-0 border-solid border-t-2 border-black bg-white'>
             <button type='submit' className='w-full  h-full inline-block  bg-blue-600 text-white rounded'>저장하기</button>
-        </div>
+        </div> */}
+            <button type='submit' className='w-full  h-16 inline-block  bg-blue-600 text-white rounded'>저장하기</button>
+
       </form>
     </section>
   );
