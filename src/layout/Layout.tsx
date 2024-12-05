@@ -19,11 +19,13 @@ const Layout = () => {
     '/user/post/:id',
     '/home/post/:id',
     '/user/profile/:sub',
-    '/chatroom/:id'
+    '/chatroom/:id',
+    '/review/write/:id',
+
   ];
   const isHeaderBackMatch = dynamicPaths.some(path => matchPath(path, location.pathname));
 
-  const showHeaderBackPaths = ['/create/createForm','/user/profile','/home/post','/user/reserve'];
+  const showHeaderBackPaths = ['/create/createForm','/user/profile','/home/post','/user/reserve','/notice','/review/mywrite','/review/myreceive'];
   const showHeaderBack = showHeaderBackPaths.includes(location.pathname) || isHeaderBackMatch;
 
 
