@@ -44,19 +44,19 @@ const boxes=[
     id:4,
     img:Img4,
     text: '작성한 후기',
-    url:"/user/4"
+    url:"/review/mywrite"
   },
   {
     id:5,
     img:Img5,
     text: '받은후기',
-    url:"/user/5"
+    url:"/review/myreceive"
   },
   {
     id:6,
     img:Img6,
     text:'공지사항' ,
-    url:"/user/6"
+    url:"/notice"
   },
 ]
 

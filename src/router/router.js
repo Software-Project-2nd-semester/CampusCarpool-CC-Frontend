@@ -18,6 +18,11 @@ const MyPost=lazy(()=>import('../page/user/MyPost'))
 const UserProfile=lazy(()=>import('../page/user/UserProfile'))
 const MyReserve=lazy(()=>import('../page/user/MyReserve'))
 const Chatroom=lazy(()=>import('../page/chat/Chatroom'))
+const ReviewWrite=lazy(()=>import('../page/review/ReviewWrite'))
+const MyWrite=lazy(()=>import('../page/review/MyWrite'))
+const MyReceive=lazy(()=>import('../page/review/MyReceive'))
+const Notice=lazy(()=>import('../page/notice/Notice'))
+
 
 const router = createBrowserRouter([
   {
@@ -133,6 +138,38 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <Chatroom/>
+          </Suspense>
+        ),
+      },
+      {
+        path: "review/write/:id",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ReviewWrite/>
+          </Suspense>
+        ),
+      },
+      {
+        path: "review/mywrite",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <MyWrite/>
+          </Suspense>
+        ),
+      },
+      {
+        path: "review/myreceive",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <MyReceive/>
+          </Suspense>
+        ),
+      },
+      {
+        path: "notice",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Notice/>
           </Suspense>
         ),
       },
