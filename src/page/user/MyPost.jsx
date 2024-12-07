@@ -79,15 +79,15 @@ const MyPost = () => {
   if(location.state.fetch.tag==='CARPOOL_DRIVER'){
     image=Driver
     tagKor='운전자'
-    style='bg-blue-500'
+    style='bg-[#4C3EED]'
   }else if(location.state.fetch.tag==='CARPOOL_USER'){
     image=User
     tagKor='탑승자'
-    style='bg-green-500'
+    style='bg-[#01A543]'
   }else{
     image=Taxi
     tagKor='택시'
-    style='bg-yellow-300'
+    style='bg-[#E0CA00]'
   }
 
   if(location.state.fetch.samesex===true){
@@ -111,47 +111,51 @@ const MyPost = () => {
         <button>수정하기</button>
         <button onClick={handleDelete} className='text-red-500'>삭제하기</button>
       </div>
-      <div className='flex justify-between' >
-        <p>{location.state.fetch.title}</p>
-        <div className={`flex rounded gap-2 ${style}`}>
-          <img src={image} alt='alt' style={{width:'16px'}}></img>
-          <p>{tagKor}</p>
+      <div className='' >
+        <div className='flex'>
+           <div className={`flex p-1 px-2 rounded-xl gap-2 ${style}`}>
+            <img src={image} alt='alt' style={{width:'16px'}}></img>
+            <p>{tagKor}</p>
+          </div>
         </div>
+       
+        <p className='mt-4  font-bold text-2xl'>{location.state.fetch.title}</p>
+        <p className='font-semibold'>{location.state.filter.time}</p>
+        
       </div>
       <div className="mt-4 mb-4 relative w-[calc(100%+40px)] -left-5 border border-b-10 border-solid border-gray-300"></div>
       <div>
-        <p>{location.state.filter.time}</p>
-        <div className='flex'>
+        <div className='flex mb-2'>
           <img src={Depart} alt='alt' style={{width:'24px'}}></img>
-          <p>{location.state.fetch.departurePlaceName}</p>
+          <p className='text-lg font-semibold'>{location.state.fetch.departurePlaceName}</p>
         </div>
         <p>↓</p>
-        <div className='flex'>
+        <div className='flex mt-2'>
           <img src={Arrive} alt='alt' style={{width:'24px'}}></img>
-          <p>{location.state.fetch.arrivePlaceName}</p>
+          <p className='text-lg font-semibold'>{location.state.fetch.arrivePlaceName}</p>
         </div>
       </div>
       <div className="mt-4 mb-4 relative w-[calc(100%+40px)] -left-5 border border-b-10 border-solid border-gray-300"></div>
 
       <div>
-        <p>이동 설명</p>
-        <p className='text-gray-400 text-sm mb-4'>  {location.state.fetch.content} </p>
+        <p className='text-lg font-semibold'>이동 설명</p>
+        <p className='text-lg font-semibold mb-4'>  {location.state.fetch.content} </p>
         {location.state.fetch.tag==='CARPOOL_USER'&&
-        <p>탑승자 요구사항</p>
+        <p className='text-lg font-semibold'>탑승자 요구사항</p>
         }
         {location.state.fetch.tag==='CARPOOL_DRIVER'&&
-        <p>운전자 요구사항</p>
+        <p className='text-lg font-semibold' >운전자 요구사항</p>
         }{location.state.fetch.tag==='TAXI'&&
-          <p>택시 동승자 요구사항</p>
+          <p className='text-lg font-semibold'>택시 동승자 요구사항</p>
         }
         <div className='flex gap-4'>
-          <button className='bg-blue-700 text-white py-2 px-4 rounded-lg'>{samesex}</button>
-          <button className='bg-blue-700 text-white py-2 px-4 rounded-lg'>{socialCarpool}</button>
+          <button className='bg-[rgb(73,68,228)] text-sm font-bold text-white py-2 px-1 rounded-lg'>{samesex}</button>
+          <button className='bg-[rgb(73,68,228)] text-sm font-bold text-white py-2 px-1 rounded-lg'>{socialCarpool}</button>
         </div>
         {location.state.fetch.tag !== 'CARPOOL_USER' && 
         <div className='flex mt-4 justify-between'>
-          <p>현재인원/최대인원</p>
-          <p>잔여
+          <p className='text-lg font-semibold'>현재인원/최대인원</p>
+          <p className='text-lg font-semibold'>잔여
             <span className="text-blue-500">{location.state.fetch.maximumPeople - data.length}석</span>
                /{location.state.fetch.maximumPeople}석
           </p>
@@ -159,8 +163,8 @@ const MyPost = () => {
         }
         {location.state.fetch.tag === 'CARPOOL_DRIVER' &&
         <div className='mt-4'>
-          <p >차량정보</p>
-          <p className='text-gray-500 text-sm'>{location.state.fetch.carInfo}</p>
+          <p className='text-lg font-semibold'>차량정보</p>
+          <p className='text-lg font-semibold'>{location.state.fetch.carInfo}</p>
         </div>
       } 
       </div>
