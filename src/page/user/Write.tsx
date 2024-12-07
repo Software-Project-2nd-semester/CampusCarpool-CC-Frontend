@@ -40,24 +40,24 @@ const Write : ()=>JSX.Element = () => {
   return (
     <div>
       <div className='flex gap-2'>
-        <div className='flex-1 text-center border-black border-solid border rounded-xl' style={{cursor:'pointer'}}
+        <div className='flex-1 py-1 text-center border-black border-solid border rounded-xl' style={{cursor:'pointer'}}
           onClick={()=>navigate('/user/write/total')}
         >
           전체
         </div>
-        <div className='flex-1 flex justify-evenly rounded-xl bg-blue-600 ' style={{cursor:'pointer'}}
+        <div className='flex-1 py-1 flex justify-evenly rounded-xl bg-[#4C3EED] ' style={{cursor:'pointer'}}
           onClick={()=>navigate('/user/write/driver')}
         >
           <img src={Driver} alt='alt' style={{width:'16px'}}></img>
           <p>운전자</p>
         </div>
-        <div className='flex-1 flex justify-evenly rounded-xl bg-green-600 ' style={{cursor:'pointer'}}
+        <div className='flex-1 py-1 flex justify-evenly rounded-xl bg-[#01A543] ' style={{cursor:'pointer'}}
           onClick={()=>navigate('/user/write/user')}
         >
           <img src={User} alt='alt' style={{width:'16px'}}></img>
           <p>탑승자</p>
         </div>
-        <div className='flex-1 flex justify-evenly rounded-xl bg-yellow-300 ' style={{cursor:'pointer'}}
+        <div className='flex-1 py-1 flex justify-evenly rounded-xl bg-[#E0CA00] ' style={{cursor:'pointer'}}
           onClick={()=>navigate('/user/write/taxi')}
         >
           <img src={Taxi} alt='alt' style={{width:'16px'}}></img>
@@ -88,23 +88,23 @@ const Write : ()=>JSX.Element = () => {
 
           if(d.tag==='CARPOOL_DRIVER'){
             image=Driver
-            style='bg-blue-500'
-            style2='border-blue-500'
+            style='bg-[#4C3EED]'
+            style2='border-[#4C3EED]'
             tag='운전자'
           }else if(d.tag==='CARPOOL_USER'){
             image=User
-            style='bg-green-500'
-            style2='border-green-500'
+            style='bg-[#01A543]'
+            style2='border-[#01A543]'
             tag='탑승자'
           }else if(d.tag==='TAXI'){
             image=Taxi
-            style='bg-yellow-300'
-            style2='border-yellow-300'
+            style='bg-[#E0CA00]'
+            style2='border-[#E0CA00]'
             tag='택시'
           }
           return(
             <div key={index} style={{cursor:'pointer'}} onClick={()=>navigate(`/user/post/${d.id}`,{state:{fetch:d,filter:{time:finalFormattedDate}}})}
-              className={`rounded p-4 border-2  border-solid bg-gray-200 ${style2}`}
+              className={`rounded p-4 border-2  border-solid  ${style2}`}
             >
               <div className='flex justify-between'>
                 <p className='font-bold text-lg'>{d.title}</p>

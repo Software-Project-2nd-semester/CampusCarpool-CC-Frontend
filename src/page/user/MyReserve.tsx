@@ -60,27 +60,27 @@ const MyReserve = () => {
 
   return (
     <div>
-      <div className='flex gap-6'>
+      <div className='flex gap-2'>
         <div onClick={()=>setTag('total')} 
         style={{cursor:'pointer'}}
-        className='flex-1 border border-solid border-black rounded-xl'>
+        className='w-1/4 py-1 flex-1 border border-solid border-black rounded-xl'>
           <p className='text-center'>전체</p>
         </div>
         <div onClick={()=>setTag('driver')} 
         style={{cursor:'pointer'}}
-        className='flex flex-1 bg-blue-500 rounded-xl justify-evenly'>
+        className='flex py-1 w-1/4 flex-1 bg-[#4C3EED] rounded-xl justify-evenly'>
           <img src={Driver} alt='alt' style={{width:'16px'}}></img>
           <p>운전자</p>
         </div>
         <div onClick={()=>setTag('user')}  
         style={{cursor:'pointer'}}
-        className='flex flex-1 justify-evenly rounded-xl bg-green-500'>
+        className='flex py-1 w-1/4 flex-1 justify-evenly rounded-xl bg-[#01A543]'>
          <img src={User} alt='alt' style={{width:'16px'}}></img>
           <p>탑승자</p>
         </div>
         <div onClick={()=>setTag('taxi')} 
         style={{cursor:'pointer'}} 
-        className='flex flex-1 justify-evenly rounded-xl bg-yellow-300'>
+        className='flex py-1 w-1/4 flex-1 justify-evenly rounded-xl bg-[#E0CA00]'>
          <img src={Taxi} alt='alt' style={{width:'16px'}}></img>
           <p>택시</p>
         </div>
@@ -108,19 +108,19 @@ const MyReserve = () => {
 
 
           if(d.tag==='CARPOOL_DRIVER'){
-            border='border-2 border-blue-500 border-solid rounded'
+            border='border-2 border-[#4C3EED] border-solid rounded'
             image=Driver
-            style='bg-blue-500'
+            style='bg-[#4C3EED]'
             tagkor='운전자'
           }else if(d.tag==='CARPOOL_USER'){
-            border='border-2 border-green-500 border-solid rounded'
+            border='border-2 border-[#01A543] border-solid rounded'
             image=User
-            style='bg-green-500'
+            style='bg-[#01A543]'
             tagkor='탑승자'
           }else{
-            border='border-2 border-yellow-300 border-solid rounded'
+            border='border-2 border-[#E0CA00] border-solid rounded'
             image=Taxi
-            style='bg-yellow-300'
+            style='bg-[#E0CA00]'
             tagkor='택시'
           }
 
@@ -130,7 +130,7 @@ const MyReserve = () => {
           <div key={index} 
             onClick={()=>{navigate(`/home/post/${d.id}`)}}
             style={{cursor:'pointer'}}
-            className={`bg-gray-200 mb-4 px-4 py-4 ${border}`}
+            className={` mb-4 px-4 py-4 ${border}`}
           >
             <div className=' flex justify-between'>
               <p>{d.title}</p>
