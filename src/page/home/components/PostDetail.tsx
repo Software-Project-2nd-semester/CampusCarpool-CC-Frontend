@@ -225,9 +225,15 @@ const PostDetail = () => {
         <>
             <section className='flex justify-between'>
                 {renderTag()}
-                <button onClick={()=>{navigate(`/review/write/${id}`)}} className='bg-blue-700 py-2 text-white px-2 rounded-xl'>리뷰쓰기</button>
+                <button onClick={() => {
+                    navigate(`/review/write/${id}`)
+                }} className='bg-blue-700 py-2 text-white px-2 rounded-xl'>리뷰쓰기
+                </button>
             </section>
-            <section className='font-bold text-xl'>
+            <section className='font-bold text-2xl'>
+                {postDetailData.title}
+            </section>
+            <section className='font-medium text-l'>
                 {dateFormat(postDetailData.departureAt)}
             </section>
             <MyHr/>
