@@ -15,7 +15,7 @@ const Header = styled.header`
     ${tw`w-screen fixed top-0 left-0 bg-white flex px-5 z-10`}
     height:80px;
 
-    @media (min-width: 500px) {
+    @media (min-width: 501px) {
         transform: translateX(-50%);
         left: 50%;
         width:430px;
@@ -26,7 +26,7 @@ const Footer = styled.footer`
     ${tw`px-5 w-screen fixed bottom-0 left-0 bg-white flex items-center z-10`}
     height:80px;
     
-    @media (min-width: 500px) {
+    @media (min-width: 501px) {
         transform: translateX(-50%);
         left: 50%;
         width:430px;

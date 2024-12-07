@@ -116,9 +116,9 @@ useEffect(() => {
 };
 
   return (
-    <div style={{ height: 'calc(100vh - 80px)' }}
+    <div style={{ height: 'calc(100vh - 160px)' }}
     >
-      <div className='w-full h-[90%] flex flex-col overflow-y-auto' 
+      <div className='w-full h-full flex flex-col overflow-y-auto'
         ref={messagesContainerRef}
       >
         {messages.map((msg, index) => {
@@ -135,7 +135,7 @@ useEffect(() => {
         )  
         })}
       </div>
-      <div className='flex h-[10%] justify-center items-center'>
+      <div className='flex h-[80px] justify-center items-center absolute bottom-0 left-0 w-full '>
         <div className='pt-2'>
           <input
               type="text"
