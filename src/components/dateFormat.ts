@@ -1,8 +1,11 @@
 export const dateFormat = (date: string) => {
-    const newDate = new Date(date);
+    let newDate: Date;
 
-    // 9시간 추가
-    newDate.setHours(newDate.getHours() + 9);
+    if (date.includes('Z')) {
+        newDate = new Date(date.replace('Z', ''));
+    } else {
+        newDate = new Date(date);
+    }
 
     const options: Intl.DateTimeFormatOptions = {
         year: 'numeric',
