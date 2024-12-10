@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import { Button, StyledH3, Footer } from '../../../scss/styled/Common';
+import {dateFormat} from "../../../components/dateFormat";
 
 interface DateProps {
     setDate: React.Dispatch<React.SetStateAction<string>>;
@@ -31,26 +32,24 @@ const SubmitButton = styled(Button)`
     ${tw`text-2xl`}
 `;
 
-const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    weekday: 'short',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true
-};
-
 const DateSettingModal = ({ setDate, setOpenDateSettingModal }: DateProps) => {
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
 
     const SettingDate = () => {
-        const dateTimeString = `${selectedDate}T${selectedTime}`;
-        const newDate = new Date(dateTimeString);
+        if (!selectedDate||!selectedTime){
+            alert('날짜를 선택해주세요!');
+            return;
+        }
 
-        const formattedDate = newDate.toISOString();
+        const dateTimeString = `${selectedDate}T${selectedTime}:00`; // 시간 부분에 :00 추가
+        const newDate = new Date(dateTimeString); // 입력된 시간은 로컬 시간대 기준으로 처리
 
+        // 로컬 시간대에서 UTC로 변환
+        const offset = new Date().getTimezoneOffset() * 60000;
+        const utcDate = new Date(newDate.getTime() - offset);
+
+        const formattedDate = utcDate.toISOString();
         setDate(formattedDate);
         setOpenDateSettingModal(false);
     };
