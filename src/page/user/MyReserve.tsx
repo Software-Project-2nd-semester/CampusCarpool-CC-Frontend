@@ -133,7 +133,7 @@ const MyReserve = () => {
             className={` mb-4 px-4 py-4 ${border}`}
           >
             <div className=' flex justify-between'>
-              <p>{d.title}</p>
+              <p className='text-lg font-bold'>{d.title}</p>
               <div className={`flex gap-2 ${style} py-1 px-2 rounded-lg`}>
                  <img src={image} alt='alt' style={{width:'16px'}}></img>
                  <p>{tagkor}</p>
