@@ -42,7 +42,7 @@ const MyReserve = () => {
   },[])
 
   if (!Array.isArray(data) || data.length === 0) {
-    return <div>loading</div>;
+    return <div>예약이 없습니다</div>;
   }
 
   if(tag==='driver'){
