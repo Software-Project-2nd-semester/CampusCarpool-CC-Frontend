@@ -1,8 +1,9 @@
-현재 개발중
+
 ## :fire: 팀명 및 프로젝트 소개
 <p align="center">
-  <img width="200" src="https://github.com/user-attachments/assets/f7668f47-e145-4761-b47c-f228c6ddb5e6">
+  <img width="200" src="https://github.com/user-attachments/assets/9064e3c2-b7f1-4cc9-a782-f4bec52cc3cb">
 </p>
+
 
 <p align="center">
 
@@ -10,7 +11,10 @@
   <strong>
     - CampusCarpool -
     <br>
+    학교 오가는 길, 조금 더 편안하고 즐겁게!
+    <br>
     학생들의 등하교 커뮤니티 형성 서비스
+    
   </strong>
 </p>
 
@@ -19,6 +23,13 @@
 ## :heavy_check_mark: 주제 선정
 <br>
 
+일정한 노선과 시간에 맞춰야 하는 대중교통의 불편,
+
+등하교 시간 교통 체증으로 인한 시간 소모,
+
+택시 합승 커뮤니티 형성의 부족,
+
+학생들을 연결하여 대중교통의 불편을 해결하고 네트워킹 기회를 제공하는 앱 
 
 <br>
 
@@ -31,6 +42,13 @@
 ## :star: 주요 기술
 <br>
 
+
+<br>
+
+## :star: 시스템 아키텍처
+<br>
+
+![CCSYSTEM](https://github.com/user-attachments/assets/9bd79ebc-38c5-4bd3-9762-592d8720d347)
 
 <br>
 
