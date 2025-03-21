@@ -1,7 +1,7 @@
 
 ## :fire: 팀명 및 프로젝트 소개
 <p align="center">
-  <img width="200" src="https://github.com/user-attachments/assets/9064e3c2-b7f1-4cc9-a782-f4bec52cc3cb">
+  <img width="200" src="https://github.com/user-attachments/assets/881fb19d-8763-448a-8c2e-67f5da9932b1">
 </p>
 
 
@@ -52,7 +52,7 @@
 ## :star: 시스템 아키텍처
 <br>
 
-![CCSYSTEM](https://github.com/user-attachments/assets/9bd79ebc-38c5-4bd3-9762-592d8720d347)
+![CCSYSTEM](https://github.com/user-attachments/assets/9438e2fd-ef48-4fcb-82ec-8752a52c51ab)
 
 <br>
 
